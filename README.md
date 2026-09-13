@@ -23,9 +23,9 @@
          ┌────────────────────────┬─────────────┴────────────┬────────────────────────┐
          ▼                        ▼                          ▼                        ▼
 ┌──────────────────┐    ┌──────────────────┐       ┌──────────────────┐     ┌──────────────────┐
-│TokenVector.Vision│    │TokenVector.Numerics│     │ TokenVector.GPU  │     │ TokenVector.Data │
-│(Computer Vision  │    │  (Linear Algebra │       │(DirectX12/OpenCL │     │ (Data Pipeline & │
-│  2D & 3D Voxel)  │    │  & NDArray Core) │       │Compute Shaders)  │     │  Double-Buffer)  │
+│TokenVector.Vision│    │TokenVector.Numerics│     │ TokenVector.Text │     │ TokenVector.Data │
+│(Computer Vision  │    │  (Linear Algebra │       │(Text, Tokenizer, │     │ (Data Pipeline & │
+│  2D & 3D Voxel)  │    │  & NDArray Core) │       │ Embeddings & LLM)│     │  Double-Buffer)  │
 └────────┬─────────┘    └────────┬─────────┘       └────────┬─────────┘     └────────┬─────────┘
          │                       │                          │                        │
          └───────────────────────┼──────────────────────────┴────────────────────────┘
@@ -33,16 +33,16 @@
                      ┌────────────────────────┐
                      │ TokenVector.Inference  │
                      │  (Embedded Inference:  │
-                     │  YOLO, ViT, UNet3D)    │
+                     │  Vision & LLM Models)  │
                      └────────────────────────┘
 ```
 
 ### Core Components in the Ecosystem:
 1. **[`TokenVector.Numerics`](https://github.com/nguyenhungtran18/TokenVector.Numerics)**: High-performance linear algebra and N-dimensional array (`NDArray<T>`) tensor core accelerated by AVX2/AVX-512/FMA intrinsics with zero-copy interoperability.
 2. **[`TokenVector.Vision`](https://github.com/nguyenhungtran18/TokenVector.Vision)**: 2D & 3D Volumetric vision engine, 1-Pass Fused SIMD transforms, YOLO Letterbox, NMS, and ImagePainter outperforming TorchVision and ImageSharp.
-3. **`TokenVector.GPU`**: Cross-platform GPU computing engine (Direct3D 12 Compute Shaders, OpenCL, Vulkan) optimized for AMD Radeon, NVIDIA GeForce, and Intel Arc.
+3. **[`TokenVector.Text`](https://github.com/nguyenhungtran18/TokenVector.Text)**: High-speed Zero-GC text processing, tokenization algorithms (BPE, WordPiece, SentencePiece), vector embeddings, and LLM preprocessing pipeline.
 4. **`TokenVector.Data`**: High-throughput multi-threaded double-buffering prefetching pipeline eliminating I/O bottlenecks during model training.
-5. **`TokenVector.Inference`**: Lightweight embedded neural network execution engine running YOLO, Vision Transformers (ViT), CNNs, and UNet3D natively.
+5. **`TokenVector.Inference`**: Lightweight embedded neural network execution engine running YOLO, Vision Transformers (ViT), CNNs, UNet3D, and language models natively.
 
 ---
 
