@@ -29,9 +29,8 @@ __pycache__/
 Thumbs.db
 Desktop.ini
 
-## NuGet Packages created in root
-*.nupkg
-*.snupkg
+## Distribution artifacts
+!dist/bin/**
 !dist/nuget/*.nupkg
 !dist/nuget/*.snupkg
 !dist/*.zip

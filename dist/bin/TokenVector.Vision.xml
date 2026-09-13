@@ -1,0 +1,914 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TokenVector.Vision</name>
+    </assembly>
+    <members>
+        <member name="T:TokenVector.Vision.Batching.BatchOps">
+            <summary>
+            High-throughput Batch operations for collating multiple images into an NCHW / NHWC contiguous tensor.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Batching.BatchOps.StackNCHW(System.ReadOnlySpan{TokenVector.Vision.Common.ImageBuffer})">
+            <summary>
+            Stacks an array/span of planar Float32 [C, H, W] ImageBuffers into a single contiguous NCHW unmanaged buffer.
+            </summary>
+            <param name="images">Array or span of planar CHW float images of identical size.</param>
+            <returns>Contiguous unmanaged ImageBuffer containing the entire batch [N, C, H, W].</returns>
+        </member>
+        <member name="T:TokenVector.Vision.Codecs.IImageDecoder">
+            <summary>
+            Interface for high-speed image decoders and header parsers.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Codecs.IImageDecoder.DecodeHeader(System.ReadOnlySpan{System.Byte})">
+            <summary>
+            Parses image headers in O(1) time without loading entire pixel payload.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Codecs.IImageDecoder.DecodeFileHeader(System.String)">
+            <summary>
+            Parses file header on disk without reading the entire file.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Codecs.IImageDecoder.Decode(System.ReadOnlySpan{System.Byte},TokenVector.Vision.Common.ImageBuffer)">
+            <summary>
+            Decodes raw image data directly into an unmanaged ImageBuffer.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Codecs.IImageDecoder.DecodeFile(System.String,TokenVector.Vision.Common.ImageBuffer)">
+            <summary>
+            Decodes an image file on disk into an unmanaged ImageBuffer.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Codecs.IImageEncoder">
+            <summary>
+            Interface for high-speed image encoders.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Codecs.IImageEncoder.Encode(TokenVector.Vision.Common.ImageBuffer,System.IO.Stream,System.String)">
+            <summary>
+            Encodes an ImageBuffer into a Stream.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Codecs.IImageEncoder.EncodeToFile(TokenVector.Vision.Common.ImageBuffer,System.String)">
+            <summary>
+            Encodes an ImageBuffer directly into a file on disk.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Codecs.IImageEncoder.EncodeToBytes(TokenVector.Vision.Common.ImageBuffer,System.String)">
+            <summary>
+            Encodes an ImageBuffer into a newly allocated byte array.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Codecs.ImageDecoder">
+            <summary>
+            Ultra-fast unmanaged image decoder and header parser.
+            Supports zero-heap header parsing for JPEG, PNG, BMP, WebP, QOI, and Netpbm (PPM/PGM).
+            Direct pixel decoders for BMP, QOI, PPM, and PGM with zero GC allocation.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Codecs.ImageDecoder.DecodeHeader(System.ReadOnlySpan{System.Byte})">
+            <inheritdoc/>
+        </member>
+        <member name="M:TokenVector.Vision.Codecs.ImageDecoder.DecodeFileHeader(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TokenVector.Vision.Codecs.ImageDecoder.Decode(System.ReadOnlySpan{System.Byte},TokenVector.Vision.Common.ImageBuffer)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TokenVector.Vision.Codecs.ImageDecoder.DecodeFile(System.String,TokenVector.Vision.Common.ImageBuffer)">
+            <inheritdoc/>
+        </member>
+        <member name="T:TokenVector.Vision.Codecs.ImageEncoder">
+            <summary>
+            Ultra high-speed unmanaged image encoder for BMP, QOI, Netpbm, and Raw image formats.
+            Zero GC allocations on pre-allocated streams or byte spans.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Codecs.ImageEncoder.Encode(TokenVector.Vision.Common.ImageBuffer,System.IO.Stream,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TokenVector.Vision.Codecs.ImageEncoder.EncodeToFile(TokenVector.Vision.Common.ImageBuffer,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TokenVector.Vision.Codecs.ImageEncoder.EncodeToBytes(TokenVector.Vision.Common.ImageBuffer,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="T:TokenVector.Vision.Common.ImageBuffer">
+            <summary>
+            High-performance unmanaged image buffer providing Zero-GC memory management,
+            SIMD 64-byte alignment, sub-region zero-copy slicing, and fast pointer access.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Vision.Common.ImageBuffer.Info">
+            <summary>
+            Image dimensions and format descriptor.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Vision.Common.ImageBuffer.Width">
+            <summary>
+            Width in pixels.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Vision.Common.ImageBuffer.Height">
+            <summary>
+            Height in pixels.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Vision.Common.ImageBuffer.Channels">
+            <summary>
+            Number of color channels.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Vision.Common.ImageBuffer.Format">
+            <summary>
+            Pixel format.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Vision.Common.ImageBuffer.Stride">
+            <summary>
+            Row stride in bytes.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Vision.Common.ImageBuffer.Layout">
+            <summary>
+            Memory layout (HWC, CHW, etc.).
+            </summary>
+        </member>
+        <member name="P:TokenVector.Vision.Common.ImageBuffer.IsFloatingPoint">
+            <summary>
+            Whether data is 32-bit floating point.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Vision.Common.ImageBuffer.ByteLength">
+            <summary>
+            Total buffer size in bytes.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Vision.Common.ImageBuffer.ElementCount">
+            <summary>
+            Total element count (pixels * channels).
+            </summary>
+        </member>
+        <member name="P:TokenVector.Vision.Common.ImageBuffer.IsDisposed">
+            <summary>
+            Whether this buffer has been disposed.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Vision.Common.ImageBuffer.BytePointer">
+            <summary>
+            Raw unmanaged pointer to the first byte of pixel data.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Vision.Common.ImageBuffer.FloatPointer">
+            <summary>
+            Raw unmanaged pointer to 32-bit floating point pixel data.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.#ctor(TokenVector.Vision.Common.ImageInfo)">
+            <summary>
+            Allocates an aligned unmanaged memory buffer for the specified image metadata.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.#ctor(System.Void*,TokenVector.Vision.Common.ImageInfo,System.Boolean)">
+            <summary>
+            Wraps an existing unmanaged memory block without copy.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.#ctor(TokenVector.Vision.Common.ImageBuffer,System.Int32,TokenVector.Vision.Common.ImageInfo)">
+            <summary>
+            Internal view constructor for sub-region slicing.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.CreateRgb(System.Int32,System.Int32)">
+            <summary>
+            Creates a newly allocated RGB24 image buffer.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.CreateGrayscale(System.Int32,System.Int32)">
+            <summary>
+            Creates a newly allocated Grayscale8 image buffer.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.CreateRgba(System.Int32,System.Int32)">
+            <summary>
+            Creates a newly allocated RGBA32 image buffer.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.CreateFloat32CHW(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Creates a newly allocated Float32 Planar (CHW) tensor buffer.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.CreateFloat32NCHW(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Creates a newly allocated Float32 Batch Planar (NCHW) tensor buffer.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.CreateFloat32HWC(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Creates a newly allocated Float32 Interleaved (HWC) buffer.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.Create(TokenVector.Vision.Common.ImageInfo)">
+            <summary>
+            Creates an ImageBuffer with specific ImageInfo.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.AsByteSpan">
+            <summary>
+            Returns the buffer as a byte Span.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.AsReadOnlyByteSpan">
+            <summary>
+            Returns the buffer as a ReadOnlySpan of bytes.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.AsFloatSpan">
+            <summary>
+            Returns the buffer as a float Span.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.AsReadOnlyFloatSpan">
+            <summary>
+            Returns the buffer as a ReadOnlySpan of floats.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.GetRowBytePointer(System.Int32)">
+            <summary>
+            Gets a pointer to the start of a specific row in HWC layout.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.GetRowByteSpan(System.Int32)">
+            <summary>
+            Gets a Span over a specific row in HWC layout.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.GetChannelPlaneFloatPointer(System.Int32)">
+            <summary>
+            Gets a pointer to a specific channel plane in CHW planar layout.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.GetChannelPlaneFloatSpan(System.Int32)">
+            <summary>
+            Gets a Span over a specific channel plane in CHW planar layout.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.Slice(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Creates a zero-copy sub-region view sharing underlying memory.
+            Stride is preserved from the parent buffer.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.CopyTo(TokenVector.Vision.Common.ImageBuffer)">
+            <summary>
+            Copies pixels from this buffer into a destination buffer.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.Clone">
+            <summary>
+            Creates a deep detached clone with newly allocated aligned unmanaged memory.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.ImageBuffer.Clear">
+            <summary>
+            Clears the entire buffer to 0 bytes.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Common.ImageInfo">
+            <summary>
+            Comprehensive metadata descriptor for image buffers and tensors.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Common.InterpolationMode">
+            <summary>
+            Image sampling and spatial interpolation algorithms.
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Common.InterpolationMode.Nearest">
+            <summary>
+            Nearest-neighbor interpolation (fastest, box filter).
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Common.InterpolationMode.Bilinear">
+            <summary>
+            Bilinear interpolation using 2x2 neighborhood (default for standard vision tasks).
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Common.InterpolationMode.Bicubic">
+            <summary>
+            Bicubic interpolation using 4x4 neighborhood (Catmull-Rom or cubic spline).
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Common.InterpolationMode.Lanczos">
+            <summary>
+            Lanczos-3 interpolation using 6x6 sinc window (highest quality, sharpest details).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Common.MemoryLayout">
+            <summary>
+            Memory arrangement of image and tensor dimensions.
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Common.MemoryLayout.HWC">
+            <summary>
+            Interleaved format [Height, Width, Channels] - standard for image storage/codecs.
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Common.MemoryLayout.CHW">
+            <summary>
+            Planar tensor format [Channels, Height, Width] - standard for CNN/Vision Transformer inputs.
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Common.MemoryLayout.NCHW">
+            <summary>
+            Batched planar tensor [Batch, Channels, Height, Width] - standard for inference batching.
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Common.MemoryLayout.NHWC">
+            <summary>
+            Batched interleaved tensor [Batch, Height, Width, Channels] - TensorFlow / TFLite layout.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Common.PixelFormat">
+            <summary>
+            Supported pixel formats for vision processing and deep learning pipelines.
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Common.PixelFormat.Grayscale8">
+            <summary>
+            Single channel 8-bit unsigned integer grayscale [0, 255].
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Common.PixelFormat.Rgb24">
+            <summary>
+            3-channel 8-bit RGB interleaved (Red, Green, Blue).
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Common.PixelFormat.Bgr24">
+            <summary>
+            3-channel 8-bit BGR interleaved (Blue, Green, Red) - OpenCV style.
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Common.PixelFormat.Rgba32">
+            <summary>
+            4-channel 8-bit RGBA interleaved (Red, Green, Blue, Alpha).
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Common.PixelFormat.Bgra32">
+            <summary>
+            4-channel 8-bit BGRA interleaved (Blue, Green, Red, Alpha).
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Common.PixelFormat.Float32Grayscale">
+            <summary>
+            Single channel 32-bit floating point [0.0, 1.0] or arbitrary feature map.
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Common.PixelFormat.Float32Rgb">
+            <summary>
+            3-channel 32-bit floating point RGB interleaved (HWC).
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Common.PixelFormat.Float32Planar">
+            <summary>
+            3-channel 32-bit floating point planar tensor (CHW).
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Common.PixelFormat.Float32Rgba">
+            <summary>
+            4-channel 32-bit floating point RGBA.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Common.VisionBufferPool">
+            <summary>
+            High-throughput, Zero-Syscall Unmanaged Image Buffer Pool.
+            Reuses 64-byte aligned unmanaged ImageBuffers to eliminate OS allocation/deallocation overhead in 60-120 FPS camera pipelines.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Vision.Common.VisionBufferPool.AvailableCount">
+            <summary>
+            Current number of idle reusable buffers ready in the pool.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Vision.Common.VisionBufferPool.TotalAllocated">
+            <summary>
+            Total number of buffers created by this pool.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.VisionBufferPool.#ctor(TokenVector.Vision.Common.ImageInfo,System.Int32,System.Int32)">
+            <summary>
+            Creates a new VisionBufferPool for buffers with matching dimensions and format.
+            </summary>
+            <param name="templateInfo">Template descriptor for buffers created by this pool.</param>
+            <param name="initialPrewarm">Number of buffers to pre-allocate immediately.</param>
+            <param name="maxCapacity">Maximum number of idle buffers to retain in the pool.</param>
+        </member>
+        <member name="M:TokenVector.Vision.Common.VisionBufferPool.Rent">
+            <summary>
+            Rents a 64-byte aligned unmanaged ImageBuffer from the pool.
+            If no idle buffer is available, a new one is allocated on-demand.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.VisionBufferPool.Return(TokenVector.Vision.Common.ImageBuffer)">
+            <summary>
+            Returns an ImageBuffer to the pool for reuse.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Common.VisionBufferPool.Dispose">
+            <summary>
+            Disposes all pre-allocated unmanaged buffers in the pool.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Datasets.ImageFolderDataset">
+            <summary>
+            High-performance dataset reader for directory structure: root_dir/class_name/xxx.ext
+            Supports lazy parallel decoding, automatic class index mapping, and transform injection.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Datasets.ImageFolderDataset.GetItem(System.Int32)">
+            <summary>
+            Loads and transforms a single sample by index.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Datasets.VisionDataLoader">
+            <summary>
+            Multi-threaded prefetching Vision Data Loader with Channel-based Double Buffering.
+            Asynchronously prepares Batch N+1 on unmanaged memory while Batch N is actively consumed.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Datasets.VisionDataLoader.GetBatchesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Starts asynchronous prefetching worker and streams batched tensors.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Detection.BoxFormat">
+            <summary>
+            Bounding box coordinate representation formats.
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Detection.BoxFormat.XYXY">
+            <summary>Top-Left and Bottom-Right corners: [X1, Y1, X2, Y2]</summary>
+        </member>
+        <member name="F:TokenVector.Vision.Detection.BoxFormat.XYWH">
+            <summary>Top-Left corner with width and height: [X, Y, Width, Height]</summary>
+        </member>
+        <member name="F:TokenVector.Vision.Detection.BoxFormat.CXCYWH">
+            <summary>Center point with width and height: [CenterX, CenterY, Width, Height]</summary>
+        </member>
+        <member name="T:TokenVector.Vision.Detection.BoundingBox">
+            <summary>
+            High-performance 2D Bounding Box representation for Object Detection and Tracking.
+            Optimized for zero-heap allocation, SIMD calculations, and fast IoU computations.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Vision.Detection.BoundingBox.Width">
+            <summary>Width of the bounding box.</summary>
+        </member>
+        <member name="P:TokenVector.Vision.Detection.BoundingBox.Height">
+            <summary>Height of the bounding box.</summary>
+        </member>
+        <member name="P:TokenVector.Vision.Detection.BoundingBox.Area">
+            <summary>Total area of the bounding box.</summary>
+        </member>
+        <member name="P:TokenVector.Vision.Detection.BoundingBox.CenterX">
+            <summary>Center X coordinate.</summary>
+        </member>
+        <member name="P:TokenVector.Vision.Detection.BoundingBox.CenterY">
+            <summary>Center Y coordinate.</summary>
+        </member>
+        <member name="M:TokenVector.Vision.Detection.BoundingBox.ComputeIoU(TokenVector.Vision.Detection.BoundingBox@)">
+            <summary>
+            Computes Intersection over Union (IoU) with another bounding box.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Detection.BoundingBox.Clip(System.Single,System.Single)">
+            <summary>
+            Clips the bounding box coordinates to image boundaries [0, 0, width, height].
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Detection.BoundingBox.Scale(System.Single,System.Single)">
+            <summary>
+            Scales the bounding box coordinates by given scale factors.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Detection.BoundingBox.Shift(System.Single,System.Single)">
+            <summary>
+            Shifts the bounding box coordinates by given offsets.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Detection.BoundingBox.FromFormat(System.Single,System.Single,System.Single,System.Single,TokenVector.Vision.Detection.BoxFormat,System.Single,System.Int32)">
+            <summary>
+            Creates a BoundingBox from arbitrary format representation.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Detection.BoundingBox3D">
+            <summary>
+            High-performance struct for 3D Axis-Aligned and Volumetric Bounding Boxes.
+            Used in 3D Object Detection, LiDAR perception, and Medical CT/MRI lesion localization.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Detection.BoundingBox3D.IoU(TokenVector.Vision.Detection.BoundingBox3D@)">
+            <summary>
+            Computes the 3D Intersection over Union (IoU) between two 3D bounding boxes.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Detection.BoundingBoxTransforms">
+            <summary>
+            Synchronous transformations for Bounding Boxes corresponding to Image Augmentations.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Detection.BoundingBoxTransforms.HorizontalFlip(TokenVector.Vision.Detection.BoundingBox@,System.Int32)">
+            <summary>
+            Flips bounding box horizontally given the image width.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Detection.BoundingBoxTransforms.VerticalFlip(TokenVector.Vision.Detection.BoundingBox@,System.Int32)">
+            <summary>
+            Flips bounding box vertically given the image height.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Detection.BoundingBoxTransforms.Crop(TokenVector.Vision.Detection.BoundingBox@,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Adjusts bounding box coordinates relative to a crop region [cropX, cropY, cropWidth, cropHeight].
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Detection.BoundingBoxTransforms.HorizontalFlipAll(System.ReadOnlySpan{TokenVector.Vision.Detection.BoundingBox},System.Span{TokenVector.Vision.Detection.BoundingBox},System.Int32)">
+            <summary>
+            Transforms an array or span of bounding boxes horizontally in-place or into destination.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Detection.LetterboxMetadata">
+            <summary>
+            Metadata describing the geometric mapping of a Letterbox transformation.
+            Allows zero-copy exact inverse mapping of model predictions back to the original image coordinates.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Detection.LetterboxMetadata.InverseTransform(TokenVector.Vision.Detection.BoundingBox@)">
+            <summary>
+            Converts a predicted bounding box on the letterboxed model input back to the original unscaled image space.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Detection.LetterboxTransform">
+            <summary>
+            Industrial-grade SIMD AVX2 Letterbox Transformation.
+            Resizes images preserving aspect ratio with constant color padding (Standard YOLOv8/v9/v11 and DETR preprocessing).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Detection.LetterboxTransform.Apply(TokenVector.Vision.Common.ImageBuffer,System.Int32,System.Int32,System.Byte,TokenVector.Vision.Detection.LetterboxMetadata@,TokenVector.Vision.Common.ImageBuffer)">
+            <summary>
+            Executes Letterbox resizing with aspect ratio preservation and padding into target unmanaged buffer.
+            </summary>
+            <param name="src">Source RGB24 image.</param>
+            <param name="targetWidth">Target width (e.g. 640).</param>
+            <param name="targetHeight">Target height (e.g. 640).</param>
+            <param name="padValue">Padding pixel intensity value (default 114 for YOLO).</param>
+            <param name="metadata">Computed letterbox metadata for coordinate inversion.</param>
+            <param name="destination">Optional destination buffer. If null, allocated automatically.</param>
+            <returns>Letterboxed ImageBuffer.</returns>
+        </member>
+        <member name="T:TokenVector.Vision.Detection.NonMaximumSuppression">
+            <summary>
+            High-throughput, Zero-Heap Non-Maximum Suppression (NMS) Engine.
+            Filters overlapping predicted bounding boxes from YOLO, Faster R-CNN, SSD, and DETR heads.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Detection.NonMaximumSuppression.Filter(System.ReadOnlySpan{TokenVector.Vision.Detection.BoundingBox},System.Single,System.Single,System.Int32)">
+            <summary>
+            Executes Standard Class-Aware Non-Maximum Suppression.
+            </summary>
+            <param name="boxes">Input candidate bounding boxes.</param>
+            <param name="iouThreshold">Intersection over Union overlap threshold (e.g. 0.45 - 0.65).</param>
+            <param name="scoreThreshold">Confidence score minimum threshold (e.g. 0.25).</param>
+            <param name="maxOutputBoxes">Maximum number of output boxes to keep.</param>
+            <returns>Filtered array of top non-overlapping bounding boxes.</returns>
+        </member>
+        <member name="M:TokenVector.Vision.Detection.NonMaximumSuppression.SortIndicesByScore(System.Int32*,System.Int32,System.Int32,System.ReadOnlySpan{TokenVector.Vision.Detection.BoundingBox})">
+            <summary>
+            In-place quicksort of indices based on box score (descending).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Drawing.RgbColor">
+            <summary>
+            24-bit RGB Color value for drawing primitives.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Drawing.RgbColor.#ctor(System.Byte,System.Byte,System.Byte)">
+            <summary>
+            24-bit RGB Color value for drawing primitives.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Drawing.ImagePainter">
+            <summary>
+            Zero-GC Native Drawing and Annotation Engine for Computer Vision.
+            Draws bounding boxes, confidence tags, keypoints, segmentation masks, lines, and text directly onto unmanaged ImageBuffer.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Drawing.ImagePainter.SetPixel(TokenVector.Vision.Common.ImageBuffer,System.Int32,System.Int32,TokenVector.Vision.Drawing.RgbColor)">
+            <summary>
+            Sets a single pixel color with bounds checking.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Drawing.ImagePainter.DrawLine(TokenVector.Vision.Common.ImageBuffer,System.Int32,System.Int32,System.Int32,System.Int32,TokenVector.Vision.Drawing.RgbColor,System.Int32)">
+            <summary>
+            Draws a straight line using Bresenham's algorithm.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Drawing.ImagePainter.DrawRectangle(TokenVector.Vision.Common.ImageBuffer,System.Int32,System.Int32,System.Int32,System.Int32,TokenVector.Vision.Drawing.RgbColor,System.Int32)">
+            <summary>
+            Draws a rectangle outline with specified border thickness.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Drawing.ImagePainter.FillRectangle(TokenVector.Vision.Common.ImageBuffer,System.Int32,System.Int32,System.Int32,System.Int32,TokenVector.Vision.Drawing.RgbColor,System.Single)">
+            <summary>
+            Fills a solid rectangle with optional alpha transparency blending.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Drawing.ImagePainter.FillCircle(TokenVector.Vision.Common.ImageBuffer,System.Int32,System.Int32,System.Int32,TokenVector.Vision.Drawing.RgbColor)">
+            <summary>
+            Fills a solid circle for keypoints or joints.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Drawing.ImagePainter.DrawText(TokenVector.Vision.Common.ImageBuffer,System.ReadOnlySpan{System.Char},System.Int32,System.Int32,TokenVector.Vision.Drawing.RgbColor,System.Int32)">
+            <summary>
+            Draws a text string using built-in 8x8 bitmap glyphs.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Drawing.ImagePainter.DrawBoundingBox(TokenVector.Vision.Common.ImageBuffer,TokenVector.Vision.Detection.BoundingBox@,System.String,TokenVector.Vision.Drawing.RgbColor,System.Int32,System.Single)">
+            <summary>
+            Draws a complete AI Detection Bounding Box with colored border, top label badge, and text tag.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Filters.CannyDetector">
+            <summary>
+            Full Industrial Canny Edge Detection Pipeline:
+            1. Gaussian Blur noise reduction.
+            2. Sobel horizontal and vertical gradients.
+            3. Gradient magnitude (via AVX Sqrt) and quantized direction.
+            4. Non-Maximum Suppression (NMS) thin edge thinning.
+            5. Double Thresholding and Hysteresis connected-component edge tracking.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Filters.Convolution2D">
+            <summary>
+            High-performance 2D Spatial Convolution Kernel engine.
+            Supports arbitrary kernel dimensions (3x3, 5x5, 7x7) with border replication.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Filters.EdgeDetection">
+            <summary>
+            Spatial gradient and edge detection operators: Sobel X/Y, Sobel Magnitude, Laplacian, and Scharr.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Filters.EdgeDetection.Sobel(TokenVector.Vision.Common.ImageBuffer,TokenVector.Vision.Common.ImageBuffer)">
+            <summary>
+            Computes Sobel Edge Magnitude: sqrt(Gx^2 + Gy^2).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Filters.EdgeDetection.Laplacian(TokenVector.Vision.Common.ImageBuffer,TokenVector.Vision.Common.ImageBuffer)">
+            <summary>
+            Computes discrete 2D Laplacian second derivative filter.
+            Kernel: [0, 1, 0; 1, -4, 1; 0, 1, 0]
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Filters.GaussianBlur">
+            <summary>
+            Ultra high-performance Separable 1D Horizontal + Vertical Gaussian Blur.
+            Accelerated via AVX2 SIMD with O(K * H * W) complexity instead of O(K^2 * H * W).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Filters.IVisionFilter">
+            <summary>
+            Base contract for high-performance 2D spatial image filters.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Filters.IVisionFilter.Apply(TokenVector.Vision.Common.ImageBuffer,TokenVector.Vision.Common.ImageBuffer)">
+            <summary>
+            Applies spatial filtering to input ImageBuffer.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Interop.NumericsBridge">
+            <summary>
+            Ultra high-performance Zero-Copy and direct SIMD Bridge between TokenVector.Vision 
+            and TokenVector.Numerics mathematical tensor kernel (NDArray of generic type).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Interop.NumericsBridge.ToNDArray(TokenVector.Vision.Common.ImageBuffer,TokenVector.Vision.Common.MemoryLayout)">
+            <summary>
+            Exports an ImageBuffer directly into an unmanaged NDArray of float tensor.
+            If layout matches, data is transferred via direct AVX2/SIMD stream or zero-copy.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Interop.NumericsBridge.ToNDArrayByte(TokenVector.Vision.Common.ImageBuffer,TokenVector.Vision.Common.MemoryLayout)">
+            <summary>
+            Exports an 8-bit ImageBuffer directly into an NDArray of byte.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Interop.NumericsBridge.AsImageBuffer(TokenVector.Numerics.Core.NDArray{System.Single},TokenVector.Vision.Common.MemoryLayout)">
+            <summary>
+            Creates an ImageBuffer wrapping an existing unmanaged/pinned NDArray of float directly.
+            Zero-Copy: shares memory with the underlying tensor.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Interop.NumericsBridge.AsImageBuffer(TokenVector.Numerics.Core.NDArray{System.Byte},TokenVector.Vision.Common.MemoryLayout)">
+            <summary>
+            Creates an ImageBuffer wrapping an existing NDArray of byte directly.
+            Zero-Copy: shares memory with the underlying tensor.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Interop.NumericsBridge.CopyToNDArray(TokenVector.Vision.Common.ImageBuffer,TokenVector.Numerics.Core.NDArray{System.Single},TokenVector.Vision.Common.MemoryLayout)">
+            <summary>
+            Copies pixel data from ImageBuffer into a pre-allocated NDArray of float.
+            Zero-GC allocation.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Transforms.ComposePipeline">
+            <summary>
+            Composable vision transform pipeline builder.
+            Supports fluent chaining and zero-allocation execution with buffer pooling.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Transforms.ComposePipeline.Execute(TokenVector.Vision.Common.ImageBuffer)">
+            <summary>
+            Executes the pipeline sequentially across all registered transforms.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Transforms.CenterCropTransform">
+            <summary>
+            High-performance spatial cropping and padding transforms.
+            Supports zero-copy sub-span slicing and SIMD memory copying.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Transforms.RandomCropTransform">
+            <summary>
+            Random spatial cropping transform for training data augmentation.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Transforms.PadTransform">
+            <summary>
+            Uniform padding transform around an image.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Transforms.FusedTransforms">
+            <summary>
+            Fused Vision Operators: Executes Multi-stage pipelines in a SINGLE PASS.
+            Keeps intermediate results in CPU registers / L1 cache for maximum memory bandwidth efficiency.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Transforms.FusedTransforms.ResizeNormalizeCHW(TokenVector.Vision.Common.ImageBuffer,System.Int32,System.Int32,System.ReadOnlySpan{System.Single},System.ReadOnlySpan{System.Single},TokenVector.Vision.Common.ImageBuffer)">
+            <summary>
+            Fused 1-Pass Operator: Bilinear Resize + Normalize + Planar CHW Transpose.
+            Formula: Pixel Byte[H, W, C] -> Interpolated Float -> (val - mean)/std -> Planar Tensor[C, H, W].
+            Achieves 0 bytes GC allocation and up to 4x throughput speedup over sequential 3-pass execution.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Transforms.FusedTransforms.LetterboxNormalizeCHW(TokenVector.Vision.Common.ImageBuffer,System.Int32,System.Int32,System.ReadOnlySpan{System.Single},System.ReadOnlySpan{System.Single},System.Byte,TokenVector.Vision.Detection.LetterboxMetadata@,TokenVector.Vision.Common.ImageBuffer)">
+            <summary>
+            Fused 1-Pass Operator: YOLO Aspect-Ratio Letterbox + Normalization + Planar CHW Transpose.
+            Eliminates all intermediate buffers and achieves 3,000+ FPS end-to-end YOLO preprocessing.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Transforms.HorizontalFlipTransform">
+            <summary>
+            High-speed geometric transforms: Horizontal Flip, Vertical Flip, and Affine Rotation.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Transforms.VerticalFlipTransform">
+            <summary>
+            Vertical image flip transform.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Transforms.RotateTransform">
+            <summary>
+            Continuous affine rotation transform with bilinear resampling.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Transforms.IVisionTransform">
+            <summary>
+            Core contract for high-performance zero-GC vision transformations.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Transforms.IVisionTransform.Apply(TokenVector.Vision.Common.ImageBuffer,TokenVector.Vision.Common.ImageBuffer)">
+            <summary>
+            Applies transformation to input ImageBuffer and writes into output ImageBuffer.
+            If output is null, a new ImageBuffer is allocated.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Transforms.IVisionTransform.GetOutputInfo(TokenVector.Vision.Common.ImageInfo)">
+            <summary>
+            Computes the output ImageInfo based on input metadata.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Transforms.LayoutTransforms">
+            <summary>
+            High-speed SIMD Layout Transforms: Transpose Interleaved [H, W, C] to Planar [C, H, W].
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Transforms.NormalizeTransform">
+            <summary>
+            Vectorized Normalization Transform: (x - mean) / std or (x * scale) + bias.
+            Accelerated via AVX2 and FMA SIMD intrinsics.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Vision.Transforms.NormalizeTransform.ImageNet">
+            <summary>
+            Default ImageNet normalization: Mean = [0.485, 0.456, 0.406], Std = [0.229, 0.224, 0.225]
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Transforms.ColorJitterTransform">
+            <summary>
+            High-speed photometric data augmentations: Brightness, Contrast, Saturation, Hue, Gamma, and Grayscale.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Transforms.AdjustGammaTransform">
+            <summary>
+            Vectorized Gamma adjustment transform.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Transforms.GrayscaleTransform">
+            <summary>
+            Fast SIMD-accelerated RGB to Grayscale conversion transform.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Transforms.ResizeTransform">
+            <summary>
+            Ultra high-performance Image Resizing Transform accelerated with AVX2 and FMA SIMD intrinsics.
+            Supports Bilinear, Bicubic, and Nearest Neighbor interpolation.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Volumetric.Volume3DBuffer">
+            <summary>
+            High-performance unmanaged 3D Volumetric buffer for Large Spatial Dimensions (CT/MRI, 3D Vision, Voxels).
+            Supports zero-GC unmanaged memory allocation, 64-byte SIMD alignment, and 2D slice referencing.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Volumetric.Volume3DBuffer.GetSlice(System.Int32)">
+            <summary>
+            Extracts a 2D slice at depth index z as an ImageBuffer without heap memory copy.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Volumetric.Volume3DBuffer.Fill(System.Single)">
+            <summary>
+            Fills the entire 3D volume with a constant float value.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Volumetric.Volume3DBuffer.Fill(System.Byte)">
+            <summary>
+            Fills the entire 3D volume with a constant byte value.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Volumetric.Volume3DBuffer.ExtractSubvolume(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Extracts a 3D subvolume (ROI) from this volume.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Volumetric.VolumeLayout">
+            <summary>
+            Memory layout for 3D Volumetric images and tensors.
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Volumetric.VolumeLayout.DHWC">
+            <summary>
+            Depth-Height-Width-Channels (Interleaved 3D Voxels: D, H, W, C)
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Volumetric.VolumeLayout.CDHW">
+            <summary>
+            Channels-Depth-Height-Width (Planar 3D AI Tensor: C, D, H, W)
+            </summary>
+        </member>
+        <member name="F:TokenVector.Vision.Volumetric.VolumeLayout.DHW">
+            <summary>
+            Depth-Height-Width (Single-channel scalar volume: D, H, W)
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Volumetric.Volume3DInfo">
+            <summary>
+            Comprehensive metadata descriptor for 3D Volumetric buffers and tensors.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Vision.Volumetric.Volume3DTransforms">
+            <summary>
+            High-performance 3D Volumetric image transformations (Trilinear Resampling, 3D Spatial Filters, 3D Pooling).
+            Designed for high-throughput Zero-GC processing of large 3D medical scans and AI voxel fields.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Volumetric.Volume3DTransforms.ResampleTrilinear(TokenVector.Vision.Volumetric.Volume3DBuffer,System.Int32,System.Int32,System.Int32,TokenVector.Vision.Volumetric.Volume3DBuffer)">
+            <summary>
+            Resamples a 3D Volumetric buffer using Trilinear Interpolation (8-corner voxel interpolation).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Volumetric.Volume3DTransforms.FilterBox3D(TokenVector.Vision.Volumetric.Volume3DBuffer,TokenVector.Vision.Volumetric.Volume3DBuffer)">
+            <summary>
+            Executes a 3D Box Spatial Filter (3x3x3 smoothing) over the 3D volume.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Vision.Volumetric.Volume3DTransforms.MaxPooling3D(TokenVector.Vision.Volumetric.Volume3DBuffer,TokenVector.Vision.Volumetric.Volume3DBuffer)">
+            <summary>
+            Executes 3D Max Pooling downsampling (stride 2x2x2) for 3D AI Feature Extraction.
+            </summary>
+        </member>
+    </members>
+</doc>

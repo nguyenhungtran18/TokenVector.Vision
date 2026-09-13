@@ -1,0 +1,2108 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TokenVector.Numerics</name>
+    </assembly>
+    <members>
+        <member name="T:TokenVector.Numerics.Autograd.AutogradNode`1">
+            <summary>
+            Base abstract class for all backward execution nodes in the Dynamic Compute Graph (DAG).
+            </summary>
+            <typeparam name="T">Floating-point numeric type.</typeparam>
+        </member>
+        <member name="P:TokenVector.Numerics.Autograd.AutogradNode`1.Inputs">
+            <summary>
+            The input tensors that fed into this operation.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Numerics.Autograd.AutogradNode`1.Output">
+            <summary>
+            The output tensor produced by this operation.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Autograd.AutogradNode`1.Backward(TokenVector.Numerics.Core.NDArray{`0})">
+            <summary>
+            Executes the vector-jacobian product and propagates gradients backward to parent tensors.
+            </summary>
+            <param name="gradOutput">Incoming gradient from child nodes.</param>
+        </member>
+        <member name="M:TokenVector.Numerics.Autograd.AutogradNode`1.GetParentNodes">
+            <summary>
+            Retrieves all parent AutogradNodes feeding into the inputs.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Autograd.AutogradNode`1.Unbroadcast(TokenVector.Numerics.Core.NDArray{`0},System.Int32[])">
+            <summary>
+            Reduces and unbroadcasts an incoming gradient tensor to match the original tensor shape.
+            </summary>
+            <param name="grad">Incoming gradient NDArray.</param>
+            <param name="targetShape">Original target shape before forward broadcast.</param>
+            <returns>Unbroadcasted gradient matching targetShape.</returns>
+        </member>
+        <member name="T:TokenVector.Numerics.Autograd.NN.Module`1">
+            <summary>
+            Base class for all Neural Network layers and composite modules.
+            </summary>
+            <typeparam name="T">Floating-point numeric type.</typeparam>
+        </member>
+        <member name="M:TokenVector.Numerics.Autograd.NN.Module`1.Forward(TokenVector.Numerics.Autograd.Tensor{`0})">
+            <summary>
+            Executes the forward pass of this module.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Autograd.NN.Module`1.Parameters">
+            <summary>
+            Collects all learnable parameter tensors belonging to this module and its submodules.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Autograd.NN.Module`1.ZeroGrad">
+            <summary>
+            Resets all parameter gradients to null.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Autograd.NN.Linear`1">
+            <summary>
+            Fully connected linear (dense) layer: Y = X * W + b.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Autograd.NN.Sequential`1">
+            <summary>
+            Sequential container module that cascades multiple modules in order.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Autograd.NN.RMSNorm`1">
+            <summary>
+            Root Mean Square Layer Normalization (RMSNorm) for LLMs &amp; Transformers.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Autograd.Nodes.ActivationAndReductionNodes`1">
+            <summary>
+            Backward nodes and factory methods for activation functions, reductions, and loss functions.
+            </summary>
+            <typeparam name="T">Floating-point numeric type.</typeparam>
+        </member>
+        <member name="M:TokenVector.Numerics.Autograd.Nodes.ActivationAndReductionNodes`1.MSELoss(TokenVector.Numerics.Autograd.Tensor{`0},TokenVector.Numerics.Autograd.Tensor{`0})">
+            <summary>
+            Computes Mean Squared Error (MSE) loss: L = Mean((yPred - yTrue)^2).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Autograd.Nodes.ActivationAndReductionNodes`1.CrossEntropyLoss(TokenVector.Numerics.Autograd.Tensor{`0},TokenVector.Numerics.Autograd.Tensor{`0})">
+            <summary>
+            Computes Cross Entropy Loss for classification: L = -Mean(sum(target * log_softmax(pred), axis=-1)).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Autograd.Nodes.MathAndMatrixNodes`1">
+            <summary>
+            Backward nodes and factory methods for fundamental arithmetic, matrix, and tensor transformation operations.
+            </summary>
+            <typeparam name="T">Floating-point numeric type.</typeparam>
+        </member>
+        <member name="T:TokenVector.Numerics.Autograd.Optim.Optimizer`1">
+            <summary>
+            Base class for all tensor gradient optimization algorithms.
+            </summary>
+            <typeparam name="T">Floating-point numeric type.</typeparam>
+        </member>
+        <member name="M:TokenVector.Numerics.Autograd.Optim.Optimizer`1.ZeroGrad">
+            <summary>
+            Resets all gradients of registered parameters to null.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Autograd.Optim.Optimizer`1.Step">
+            <summary>
+            Performs a single optimization parameter update step.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Autograd.Optim.SGD`1">
+            <summary>
+            Stochastic Gradient Descent (SGD) optimizer with optional Momentum and Weight Decay.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Autograd.Optim.AdamW`1">
+            <summary>
+            AdamW optimizer with decoupled weight decay (Loshchilov &amp; Hutter).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Autograd.Tensor`1">
+            <summary>
+            Differentiable Tensor engine with Dynamic Compute Graph (Reverse-Mode Autograd).
+            </summary>
+            <typeparam name="T">Floating-point numeric type.</typeparam>
+        </member>
+        <member name="M:TokenVector.Numerics.Autograd.Tensor`1.AccumulateGrad(TokenVector.Numerics.Core.NDArray{`0})">
+            <summary>
+            Accumulates incoming gradient to this tensor's Grad buffer.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Autograd.Tensor`1.ZeroGrad">
+            <summary>
+            Resets the gradient buffer to null.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Autograd.Tensor`1.Detach">
+            <summary>
+            Detaches this tensor from the computation graph.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Autograd.Tensor`1.Backward(TokenVector.Numerics.Autograd.Tensor{`0})">
+            <summary>
+            Executes Reverse-Mode Automatic Differentiation via topological sort on the dynamic DAG.
+            </summary>
+            <param name="gradient">Optional external gradient (defaults to 1.0 for scalar output).</param>
+        </member>
+        <member name="T:TokenVector.Numerics.Biology.ProteinGeometry">
+            <summary>
+            Provides computational structural biology and protein mathematics (AlphaFold SE(3) geometry, Dihedral angles, Kabsch RMSD, TM-score).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Biology.ProteinGeometry.ComputeDihedralAngle(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Computes the dihedral (torsion) angle in radians [-pi, pi] defined by 4 consecutive 3D atom coordinates (p1, p2, p3, p4).
+            Used for calculating protein backbone angles (phi, psi, omega).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Biology.ProteinGeometry.KabschRMSD(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Computes optimal Root-Mean-Square Deviation (RMSD) between predicted and true 3D coordinate structures [N, 3] after Kabsch superposition.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Biology.ProteinGeometry.TMScore(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Computes TM-score (0 to 1) for assessing structural similarity between two protein structures.
+            TM-score > 0.5 indicates generally the same protein fold.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Core.BoolNDArray">
+            <summary>
+            N-Dimensional Boolean Array for tensor masking, logical indexing, and conditional selections.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Core.NDArray`1">
+            <summary>
+            N-Dimensional Array (Tensor) high-performance engine for TokenVector.
+            </summary>
+            <typeparam name="T">Unmanaged numeric type.</typeparam>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.NDArray`1.#ctor(System.Int32[])">
+            <summary>
+            Creates a newly allocated tensor with given shape (C-contiguous).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.NDArray`1.#ctor(TokenVector.Numerics.Core.TensorBuffer{`0},System.Int32[],System.Int32[],System.Int32)">
+            <summary>
+            Internal constructor for views and transformations.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Numerics.Core.NDArray`1.Item(System.Int32[])">
+            <summary>
+            N-Dimensional indexer with aggressive inlining.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Numerics.Core.NDArray`1.Item(System.Int32)">
+            <summary>
+            Fast 1D indexer.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Numerics.Core.NDArray`1.Item(System.Int32,System.Int32)">
+            <summary>
+            Fast 2D indexer.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Numerics.Core.NDArray`1.Item(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Fast 3D indexer.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Numerics.Core.NDArray`1.Item(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Fast 4D indexer.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.NDArray`1.Slice(System.ValueTuple{System.Int32,System.Int32,System.Int32}[])">
+            <summary>
+            Creates a zero-copy slice of this tensor.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.NDArray`1.Permute(System.Int32[])">
+            <summary>
+            Permutes axes of this tensor (Zero-copy).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.NDArray`1.Transpose(System.Int32,System.Int32)">
+            <summary>
+            Swaps two axes of this tensor (Zero-copy).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.NDArray`1.MatrixTranspose">
+            <summary>
+            2D Matrix Transpose convenience method (swaps last two axes).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.NDArray`1.Reshape(System.Int32[])">
+            <summary>
+            Reshapes the tensor to a new shape. If contiguous, returns a zero-copy view; otherwise copies to contiguous buffer.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.NDArray`1.Contiguous">
+            <summary>
+            Returns a C-contiguous version of this tensor. If already contiguous, returns this or a reference.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.NDArray`1.BroadcastTo(System.Int32[])">
+            <summary>
+            Broadcasts this tensor to a target shape (Zero-copy with Stride-0 trick).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.NDArray`1.Clone">
+            <summary>
+            Creates a deep copy clone of this tensor.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.NDArray`1.Sum(System.Int32,System.Boolean)">
+            <summary>
+            Computes sum along the specified axis.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.NDArray`1.Mean(System.Int32,System.Boolean)">
+            <summary>
+            Computes mean along the specified axis.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.NDArray`1.Max(System.Int32,System.Boolean)">
+            <summary>
+            Computes max along the specified axis.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.NDArray`1.Min(System.Int32,System.Boolean)">
+            <summary>
+            Computes min along the specified axis.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.NDArray`1.ArgMax(System.Int32)">
+            <summary>
+            Computes indices of maximum values along the specified axis.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.NDArray`1.ArgMin(System.Int32)">
+            <summary>
+            Computes indices of minimum values along the specified axis.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Core.ShapeExtensions">
+            <summary>
+            Shape transformations and dimension expansion/squeezing operations.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Core.ShapeHelper">
+            <summary>
+            High-performance mathematics helper for tensor shapes, strides, slicing, and memory layout computations.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.ShapeHelper.ComputeTotalLength(System.ReadOnlySpan{System.Int32})">
+            <summary>
+            Computes total number of elements in a tensor shape.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.ShapeHelper.ComputeRowMajorStrides(System.ReadOnlySpan{System.Int32})">
+            <summary>
+            Computes standard C-contiguous row-major strides for a given shape.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.ShapeHelper.ComputeColumnMajorStrides(System.ReadOnlySpan{System.Int32})">
+            <summary>
+            Computes Fortran-contiguous column-major strides for a given shape.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.ShapeHelper.IsContiguous(System.ReadOnlySpan{System.Int32},System.ReadOnlySpan{System.Int32})">
+            <summary>
+            Checks whether the tensor's memory layout is standard C-contiguous without holes or overlaps.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.ShapeHelper.GetFlatIndex(System.ReadOnlySpan{System.Int32},System.ReadOnlySpan{System.Int32},System.Int32)">
+            <summary>
+            Converts N-dimensional coordinates to flat buffer offset.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.ShapeHelper.GetMultiIndex(System.Int32,System.ReadOnlySpan{System.Int32},System.Span{System.Int32})">
+            <summary>
+            Converts 1D flat offset into multi-dimensional coordinates in-place.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.ShapeHelper.Permute(System.ReadOnlySpan{System.Int32},System.ReadOnlySpan{System.Int32},System.ReadOnlySpan{System.Int32})">
+            <summary>
+            Computes new shape and strides for permutation of axes.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.ShapeHelper.Slice(System.ReadOnlySpan{System.Int32},System.ReadOnlySpan{System.Int32},System.Int32,System.ValueTuple{System.Int32,System.Int32,System.Int32}[])">
+            <summary>
+            Computes zero-copy slice parameters (new shape, new strides, and new buffer offset).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Core.TensorBuffer`1">
+            <summary>
+            Unified hybrid tensor storage supporting Managed GC arrays, Unmanaged NativeMemory pointers, and Zero-Copy Views.
+            </summary>
+            <typeparam name="T">Unmanaged numeric type.</typeparam>
+        </member>
+        <member name="P:TokenVector.Numerics.Core.TensorBuffer`1.IsNative">
+            <summary>
+            Gets whether this buffer is backed by native unmanaged memory.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Numerics.Core.TensorBuffer`1.Length">
+            <summary>
+            Total element capacity of this buffer.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Numerics.Core.TensorBuffer`1.IsDisposed">
+            <summary>
+            Gets whether this buffer has been disposed.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.TensorBuffer`1.#ctor(System.Int32)">
+            <summary>
+            Creates a managed GC-backed tensor buffer.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.TensorBuffer`1.#ctor(`0[])">
+            <summary>
+            Wraps an existing managed array.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.TensorBuffer`1.AllocateNative(System.Int32)">
+            <summary>
+            Allocates an unmanaged native memory buffer.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.TensorBuffer`1.#ctor(TokenVector.Numerics.Core.TensorBuffer{`0},System.Int32,System.Int32)">
+            <summary>
+            Creates a view buffer sharing the same underlying storage of a parent buffer.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.TensorBuffer`1.AsSpan(System.Int32,System.Int32)">
+            <summary>
+            Gets a Span over the buffer memory with a specific offset and length.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.TensorBuffer`1.AsReadOnlySpan(System.Int32,System.Int32)">
+            <summary>
+            Gets a ReadOnlySpan over the buffer memory.
+            </summary>
+        </member>
+        <member name="P:TokenVector.Numerics.Core.TensorBuffer`1.Item(System.Int32)">
+            <summary>
+            Direct element indexer with aggressive inlining.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.TensorBuffer`1.GetUnsafePointer">
+            <summary>
+            Gets direct raw pointer to underlying memory (if pinned or native).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.TensorBuffer`1.ToArray(System.Int32,System.Int32)">
+            <summary>
+            Copies contents to a managed array.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Core.TensorBuffer`1.Clone">
+            <summary>
+            Creates a detached full clone of this buffer.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Crypto.LatticeMath">
+            <summary>
+            Provides post-quantum cryptography mathematics: Number Theoretic Transform (NTT), fast polynomial arithmetic, and LLL (Lenstra–Lenstra–Lovász) lattice basis reduction.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Crypto.LatticeMath.ForwardNTT(System.Span{System.Int64},System.Int64,System.Int64)">
+            <summary>
+            Computes in-place forward Number Theoretic Transform (NTT) on a polynomial of length N (power of 2) modulo prime q.
+            rootOfUnity: primitive N-th root of unity modulo q (omega^N = 1 mod q).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Crypto.LatticeMath.InverseNTT(System.Span{System.Int64},System.Int64,System.Int64)">
+            <summary>
+            Computes in-place Inverse Number Theoretic Transform (INTT) modulo prime q.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Crypto.LatticeMath.ForwardNTT(TokenVector.Numerics.Core.NDArray{System.Int64},System.Int64,System.Int64)">
+            <summary>
+            Computes Forward Number Theoretic Transform (NTT) on NDArray of length N.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Crypto.LatticeMath.InverseNTT(TokenVector.Numerics.Core.NDArray{System.Int64},System.Int64,System.Int64)">
+            <summary>
+            Computes Inverse Number Theoretic Transform (INTT) on NDArray of length N.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Crypto.LatticeMath.PolyMulNTT(TokenVector.Numerics.Core.NDArray{System.Int64},TokenVector.Numerics.Core.NDArray{System.Int64},System.Int64,System.Int64)">
+            <summary>
+            Fast cyclic/negacyclic polynomial multiplication in Z_q[X] / (X^N - 1) via NTT in O(N log N).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Crypto.LatticeMath.LLLReduction(TokenVector.Numerics.Core.NDArray{System.Double},System.Double)">
+            <summary>
+            Reduces a lattice basis matrix B [n, d] using the LLL algorithm with Lovász parameter delta (typically 0.75).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Crypto.LatticeMath.LLL_Reduction(TokenVector.Numerics.Core.NDArray{System.Double},System.Double)">
+            <summary>
+            Reduces a lattice basis matrix B [n, d] using the LLL algorithm with Lovász parameter delta (typically 0.75).
+            Returns the reduced basis matrix.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Engine.BroadcastEngine">
+            <summary>
+            High-performance multi-dimensional broadcasting engine implementing NumPy right-aligned rules and Stride-Zero Tricking.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Engine.BroadcastEngine.BroadcastShapes(System.ReadOnlySpan{System.Int32},System.ReadOnlySpan{System.Int32})">
+            <summary>
+            Computes the broadcasted output shape from two input shapes.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Engine.BroadcastEngine.ComputeBroadcastStrides(System.ReadOnlySpan{System.Int32},System.ReadOnlySpan{System.Int32},System.ReadOnlySpan{System.Int32})">
+            <summary>
+            Computes broadcast strides using Stride-0 trick for singleton dimensions.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Engine.BroadcastEngine.BroadcastTo``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32[])">
+            <summary>
+            Broadcasts an NDArray to a target shape using Stride-0 trick zero-copy view.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Engine.BroadcastEngine.Broadcast``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Broadcasts two NDArrays to a common output shape.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Engine.SIMDKernels">
+            <summary>
+            Hardware-accelerated SIMD kernel engine with AVX2/FMA fast paths and generic Vector&lt;T&gt; fallbacks.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Finance.FinanceMath">
+            <summary>
+            Provides quantitative financial mathematics: Black-Scholes-Merton option pricing, Risk Greeks, Markowitz Portfolio theory, and Cashflow discounting (NPV, IRR).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Finance.FinanceMath.BlackScholesCall(System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Computes European Call Option Price using Black-Scholes-Merton formula.
+            S: Spot price, K: Strike price, T: Time to maturity (years), r: Risk-free rate, sigma: Volatility.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Finance.FinanceMath.BlackScholesPut(System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Computes European Put Option Price using Black-Scholes-Merton formula.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Finance.FinanceMath.OptionGreeks(System.Double,System.Double,System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            Computes option risk sensitivities (The Greeks): Delta, Gamma, Vega, Theta, Rho.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Finance.FinanceMath.PortfolioReturn(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Computes expected portfolio return: r_p = w^T * r.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Finance.FinanceMath.PortfolioVolatility(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Computes expected portfolio volatility (Standard Deviation): sigma_p = sqrt(w^T * Cov * w).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Finance.FinanceMath.SharpeRatio(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Double)">
+            <summary>
+            Computes portfolio Sharpe Ratio: (r_p - r_f) / sigma_p.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Finance.FinanceMath.NPV(System.Double,TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Computes Net Present Value (NPV) of a cash flow sequence: NPV = \sum_{t=0}^N CF_t / (1 + r)^t.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Finance.FinanceMath.IRR(TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Double,System.Int32)">
+            <summary>
+            Computes Internal Rate of Return (IRR) using Newton-Raphson method.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Finance.FinanceMath.BinomialTreeAmericanOption(System.Double,System.Double,System.Double,System.Double,System.Double,System.Int32,System.Boolean)">
+            <summary>
+            Cox-Ross-Rubinstein (CRR) Binomial Tree model for American Option pricing.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Finance.FinanceMath.ValueAtRisk(TokenVector.Numerics.Core.NDArray{System.Double},System.Double)">
+            <summary>
+            Computes Value at Risk (VaR) for portfolio returns at given confidence level (e.g. 0.95 or 0.99).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Finance.FinanceMath.ConditionalValueAtRisk(TokenVector.Numerics.Core.NDArray{System.Double},System.Double)">
+            <summary>
+            Computes Conditional Value at Risk (CVaR / Expected Shortfall).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Finance.FinanceMath.BondPrice(System.Double,System.Double,System.Double,System.Int32,System.Int32)">
+            <summary>
+            Computes fair market price of a fixed-coupon bond.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Finance.FinanceMath.MacaulayDuration(System.Double,System.Double,System.Double,System.Double,System.Int32,System.Int32)">
+            <summary>
+            Computes Macaulay Duration of a bond.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Finance.FinanceMath.NelsonSiegel(System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Evaluates Nelson-Siegel yield curve spot rate at maturity t (years).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Graphs.SpectralGraph">
+            <summary>
+            Provides spectral graph theory, graph Laplacians, and spectral Chebyshev graph convolutions for Graph Neural Networks (GNN).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Graphs.SpectralGraph.Laplacian(TokenVector.Numerics.Core.NDArray{System.Double},System.Boolean)">
+            <summary>
+            Computes the unnormalized or normalized Graph Laplacian L = D - A or L_norm = I - D^{-1/2} * A * D^{-1/2}.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Graphs.SpectralGraph.ChebyshevGraphConv(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Double)">
+            <summary>
+            Computes fast spectral graph convolution using Chebyshev polynomial expansion: Y = \sum_{k=0}^{K-1} theta_k * T_k(\tilde{L}) * X.
+            Rescaled Laplacian: \tilde{L} = (2 / lambda_max) * L - I.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Interpolation.InterpolationAndSplines">
+            <summary>
+            High-performance Spline, 2D Grid (Bilinear/Bicubic), Radial Basis Function (RBF), and Barycentric Interpolation algorithms.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Interpolation.InterpolationAndSplines.CubicSplineModel">
+            <summary>
+            Represents a natural or clamped 1D cubic spline.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Interpolation.InterpolationAndSplines.CubicSpline(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Constructs a Natural Cubic Spline interpolator through knots (x, y).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Interpolation.InterpolationAndSplines.BilinearInterpolation(TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Double)">
+            <summary>
+            Bilinear interpolation on a 2D image/grid at fractional coordinate (y, x).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Interpolation.InterpolationAndSplines.RbfInterpolator">
+            <summary>
+            Multidimensional RBF interpolator (Multiquadric, Gaussian, Inverse Multiquadric, Thin-Plate).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Interpolation.InterpolationAndSplines.BarycentricInterpolation(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Double)">
+            <summary>
+            High-order stable 1D Barycentric polynomial interpolation.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.IO.TensorArchive">
+            <summary>
+            Provides multi-tensor NPZ archive storage and Memory-Mapped tensor access for massive out-of-core datasets (np.savez, np.load, np.memmap).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.IO.TensorArchive.SaveNpz``1(System.String,System.Collections.Generic.IDictionary{System.String,TokenVector.Numerics.Core.NDArray{``0}},System.Boolean)">
+            <summary>
+            Saves multiple named NDArrays into a single compressed or uncompressed .npz ZIP archive (np.savez / np.savez_compressed).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.IO.TensorArchive.LoadNpz``1(System.String)">
+            <summary>
+            Loads all NDArrays from a .npz ZIP archive into a dictionary of named tensors.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.IO.MemoryMappedNDArray`1">
+            <summary>
+            Memory-mapped NDArray representation for massive out-of-core computations directly mapped to disk.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.IO.MemoryMappedNDArray`1.ToNDArray">
+            <summary>
+            Materializes the memory-mapped tensor into an in-memory NDArray.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.IO.MemoryMappedNDArray`1.Flush">
+            <summary>
+            Flushes dirty pages to disk storage.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.IO.TensorIO">
+            <summary>
+            High-performance Tensor Serialization and I/O engine supporting NumPy .npy Binary Format, Raw Binary, and CSV.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.IO.TensorIO.SaveNpy``1(System.String,TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Saves tensor in standard NumPy .npy (Version 1.0) binary format to a file.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.IO.TensorIO.SaveNpyStream``1(TokenVector.Numerics.Core.NDArray{``0},System.IO.Stream)">
+            <summary>
+            Saves tensor in standard NumPy .npy (Version 1.0) binary format to any writable stream.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.IO.TensorIO.LoadNpy``1(System.String)">
+            <summary>
+            Loads tensor from standard NumPy .npy binary file.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.IO.TensorIO.LoadNpyStream``1(System.IO.Stream)">
+            <summary>
+            Loads tensor from standard NumPy .npy binary stream.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.LinAlg.Complex`1">
+            <summary>
+            Lightweight generic complex number struct for high-performance DSP, FFT, and tensor mathematics.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.LinAlg.Decomposition">
+            <summary>
+            Numerical linear algebra matrix decompositions: LU, QR, Cholesky, Inverse, Determinant, Trace, and System Solver.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.Decomposition.LU``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes LU decomposition with partial pivoting: PA = LU.
+            </summary>
+            <returns>(P: Permutation matrix, L: Unit lower triangular, U: Upper triangular)</returns>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.Decomposition.QR``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes QR decomposition using Householder reflections: A = QR.
+            </summary>
+            <returns>(Q: Orthogonal matrix, R: Upper triangular matrix)</returns>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.Decomposition.Cholesky``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes Cholesky decomposition of a symmetric positive-definite matrix: A = L * L^T.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.Decomposition.Solve``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Solves linear system Ax = b using LU decomposition.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.Decomposition.Inverse``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes matrix inverse A^-1.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.Decomposition.Det``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes determinant of a square matrix.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.Decomposition.Trace``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes trace (sum of diagonal elements) of a 2D matrix.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.Decomposition.Schur``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32)">
+            <summary>
+            Computes the Real Schur Decomposition of a square matrix A = Q * T * Q^T.
+            Q is an orthogonal matrix and T is quasi-upper triangular.
+            </summary>
+            <returns>(Q: Orthogonal matrix, T: Quasi-triangular Schur matrix)</returns>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.Decomposition.SolveSylvester``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Solves the Sylvester equation: A * X + X * B = C.
+            Uses vectorized Kronecker transformation: (I_n (x) A + B^T (x) I_m) * vec(X) = vec(C).
+            </summary>
+            <param name="a">Matrix A of shape [m, m]</param>
+            <param name="b">Matrix B of shape [n, n]</param>
+            <param name="c">Matrix C of shape [m, n]</param>
+            <returns>Solution matrix X of shape [m, n]</returns>
+        </member>
+        <member name="T:TokenVector.Numerics.LinAlg.Eigen">
+            <summary>
+            Spectral theory engine computing Eigenvalues and Eigenvectors (Eigh for symmetric matrices and Eig for general matrices).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.Eigen.Eigh``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes eigenvalues and eigenvectors of a real symmetric matrix A using the Jacobi eigenvalue algorithm.
+            A * v_i = lambda_i * v_i.
+            </summary>
+            <returns>(Eigenvalues: 1D array, Eigenvectors: Column-matrix V where column i is eigenvector i)</returns>
+        </member>
+        <member name="T:TokenVector.Numerics.LinAlg.EinSum">
+            <summary>
+            Einstein Summation (EinSum) engine for arbitrary tensor contractions and index notation.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.EinSum.Evaluate``1(System.String,TokenVector.Numerics.Core.NDArray{``0}[])">
+            <summary>
+            Evaluates Einstein Summation convention on operands: e.g. "ij,jk->ik", "bij,bjk->bik", "ii->", "ij->ji".
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.LinAlg.FFT">
+            <summary>
+            Universal Fast Fourier Transform (FFT) engine supporting arbitrary signal lengths via Bluestein's Chirp-Z algorithm and Cooley-Tukey Radix-2.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.FFT.FFT1D``1(System.ReadOnlySpan{TokenVector.Numerics.LinAlg.Complex{``0}})">
+            <summary>
+            Computes 1D Fast Fourier Transform on an array of Complex numbers for ANY arbitrary length N.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.FFT.IFFT1D``1(System.ReadOnlySpan{TokenVector.Numerics.LinAlg.Complex{``0}})">
+            <summary>
+            Computes 1D Inverse Fast Fourier Transform for ANY arbitrary length N.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.FFT.FFT2D``1(TokenVector.Numerics.LinAlg.Complex{``0}[0:,0:])">
+            <summary>
+            Computes 2D Fast Fourier Transform on a row-major 2D matrix of complex numbers for arbitrary dimensions.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.FFT.IFFT2D``1(TokenVector.Numerics.LinAlg.Complex{``0}[0:,0:])">
+            <summary>
+            Computes 2D Inverse Fast Fourier Transform for arbitrary dimensions.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.FFT.RFFT1D``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Real-to-Complex 1D FFT from NDArray&lt;T&gt; to NDArray&lt;T&gt; with trailing dimension [N, 2].
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.FFT.IRFFT1D``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Complex-to-Real 1D Inverse FFT from NDArray&lt;T&gt; of shape [N, 2] to real NDArray&lt;T&gt; of shape [N].
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.LinAlg.LinAlgExtended">
+            <summary>
+            Extended Linear Algebra routines: Pseudoinverse (PInv), Matrix Rank, Least Squares (LstSq), and Condition Number.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.LinAlgExtended.PInv``1(TokenVector.Numerics.Core.NDArray{``0},System.Nullable{``0})">
+            <summary>
+            Computes the Moore-Penrose Pseudoinverse of a matrix using SVD: A^+ = V * Sigma^+ * U^T.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.LinAlgExtended.MatrixRank``1(TokenVector.Numerics.Core.NDArray{``0},System.Nullable{``0})">
+            <summary>
+            Computes the numerical rank of a matrix using SVD.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.LinAlgExtended.LstSq``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes the minimum-norm least-squares solution to linear equation Ax = b via Pseudoinverse.
+            Returns 1D vector if b is 1D, or 2D matrix if b is 2D.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.LinAlgExtended.Cond``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes 2-norm condition number of matrix: kappa(A) = sigma_max / sigma_min.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.LinAlgExtended.SolveBandTridiagonal(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Solves tridiagonal linear system A x = d in O(N) using the Thomas Algorithm.
+            lower: subdiagonal [n-1], diag: main diagonal [n], upper: superdiagonal [n-1], rhs: right-hand side [n].
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.LinAlgExtended.NullSpace``1(TokenVector.Numerics.Core.NDArray{``0},System.Nullable{``0})">
+            <summary>
+            Computes the orthonormal basis for the Null Space (Kernel) of matrix A using SVD.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.LinAlgExtended.KroneckerSum``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes Kronecker Sum: A (+) B = A (x) I_b + I_a (x) B.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.LinAlg.MatrixFunctions">
+            <summary>
+            Provides advanced matrix analytic functions: Matrix Exponential (Expm via Padé [6/6]), Matrix Square Root (Sqrtm via Denman-Beavers), and Sylvester Equation Solver (AX + XB = C).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.MatrixFunctions.Expm(TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Computes the Matrix Exponential e^A using (6, 6) Padé Approximation with Scaling and Squaring (scipy.linalg.expm).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.MatrixFunctions.Sqrtm(TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Int32)">
+            <summary>
+            Computes the principal Matrix Square Root S = sqrt(A) such that S * S = A using Denman-Beavers iteration.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.MatrixFunctions.SolveSylvester(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Solves the Sylvester matrix equation AX + XB = C for X using Kronecker formulation: (I (x) A + B^T (x) I) vec(X) = vec(C).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.LinAlg.MatrixMultiplication">
+            <summary>
+            High-performance matrix multiplication engine featuring Cache Tiling (L1/L2 Blocking) and Batch MatMul.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.MatrixMultiplication.MatMul``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Multiplies two matrices (2D or Batched N-D).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.LinAlg.MatrixOps">
+            <summary>
+            Provides advanced matrix operations: Kronecker product (Kron), Outer product (Outer), Matrix Power (MatrixPower), and Matrix/Vector Norms (np.kron, np.outer, np.linalg.matrix_power, np.linalg.norm).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.MatrixOps.Kron``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes the Kronecker product of two arrays (np.kron).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.MatrixOps.Outer``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes the outer product of two vectors (np.outer).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.MatrixOps.MatrixPower``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32)">
+            <summary>
+            Raises a square matrix to the (integer) power n (np.linalg.matrix_power).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.MatrixOps.Norm``1(TokenVector.Numerics.Core.NDArray{``0},System.String)">
+            <summary>
+            Computes matrix or vector norm (np.linalg.norm).
+            Supported ord: "fro" (Frobenius), "1" (L1 norm), "2" (L2 norm), "inf" (Max norm).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.LinAlg.NumericalAnalysis">
+            <summary>
+            Numerical calculus and interpolation methods: Numerical Integration, Finite-Difference Derivatives, Lerp, and Lagrange Polynomial Interpolation.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.NumericalAnalysis.TrapezoidalRule``1(TokenVector.Numerics.Core.NDArray{``0},``0)">
+            <summary>
+            Computes definite integral using the composite Trapezoidal rule.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.NumericalAnalysis.CentralDifference2ndOrder``1(TokenVector.Numerics.Core.NDArray{``0},``0)">
+            <summary>
+            Computes 2nd-order accurate central difference numerical derivatives: (y[i+1] - y[i-1]) / (2*dx).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.NumericalAnalysis.CentralDifference4thOrder``1(TokenVector.Numerics.Core.NDArray{``0},``0)">
+            <summary>
+            Computes 4th-order accurate central difference numerical derivatives.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.NumericalAnalysis.Lerp``1(``0,``0,``0)">
+            <summary>
+            Linear interpolation between two scalar values: (1 - t) * a + t * b.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.NumericalAnalysis.Lerp``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},``0)">
+            <summary>
+            Elementwise linear interpolation between two tensors.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.NumericalAnalysis.PolynomialInterpolation``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},``0)">
+            <summary>
+            Lagrange polynomial interpolation through points (x, y) evaluated at targetX.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.LinAlg.Polynomial">
+            <summary>
+            Provides polynomial fitting, evaluation, and root-finding routines (np.polyfit, np.polyval, np.roots).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.Polynomial.PolyFit(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Int32)">
+            <summary>
+            Fits a polynomial of degree `deg` to points (x, y) using least-squares Vandermonde formulation.
+            Returns coefficients in descending order: [c_deg, c_{deg-1}, ..., c_0].
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.Polynomial.PolyVal``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Evaluates a polynomial with coefficients `coeffs` (in descending degree order) at points `x` using Horner's method.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.Polynomial.Roots(TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Computes the roots of a polynomial with given coefficients in descending degree order.
+            For degree 1: linear solution.
+            For degree 2: quadratic formula with real/complex roots.
+            For general degree: eigenvalues of the Companion Matrix.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.Polynomial.RootsTensor(TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Computes the roots of a polynomial and returns an NDArray of shape [N, 2] (Col 0: Real, Col 1: Imaginary).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.LinAlg.SignalProcessing">
+            <summary>
+            Provides 1D discrete convolution, correlation, and DSP window functions (np.convolve, np.correlate, np.hanning, np.hamming, np.blackman, np.bartlett).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SignalProcessing.Convolve``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.LinAlg.ConvMode)">
+            <summary>
+            Computes discrete 1D linear convolution of two 1D sequences (np.convolve).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SignalProcessing.Correlate``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.LinAlg.ConvMode)">
+            <summary>
+            Computes discrete 1D cross-correlation of two 1D sequences (np.correlate).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SignalProcessing.Hanning(System.Int32)">
+            <summary>
+            Computes the Hanning window: w(n) = 0.5 - 0.5 * cos(2*pi*n / (M - 1))
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SignalProcessing.Hamming(System.Int32)">
+            <summary>
+            Computes the Hamming window: w(n) = 0.54 - 0.46 * cos(2*pi*n / (M - 1))
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SignalProcessing.Blackman(System.Int32)">
+            <summary>
+            Computes the Blackman window: w(n) = 0.42 - 0.5*cos(2*pi*n/(M-1)) + 0.08*cos(4*pi*n/(M-1))
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SignalProcessing.Bartlett(System.Int32)">
+            <summary>
+            Computes the Bartlett triangular window.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SignalProcessing.DWT(TokenVector.Numerics.Core.NDArray{System.Double},System.String)">
+            <summary>
+            Computes 1D Single-level Discrete Wavelet Transform (DWT).
+            Returns (cA: Approximation coefficients, cD: Detail coefficients).
+            Supported wavelets: "haar" (default), "db4".
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SignalProcessing.IDWT(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.String)">
+            <summary>
+            Computes 1D Inverse Discrete Wavelet Transform (IDWT) reconstructing signal from cA and cD.
+            Supported wavelets: "haar" (default), "db4".
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SignalProcessing.Hilbert(TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Computes the Hilbert transform H[x] of a 1D real signal using FFT.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SignalProcessing.AnalyticSignal(TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Computes the Analytic Signal x_a(t) = x(t) + i * H[x(t)] using FFT.
+            Returns (Real: original signal, Imag: Hilbert transform).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.LinAlg.SpecialFunctions">
+            <summary>
+            Provides advanced mathematical and scientific special functions (Erf, Erfc, Gamma, LogGamma, BesselI0, BesselJ0) matching scipy.special / PyTorch Special.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SpecialFunctions.Erf``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes the Error Function erf(x) = (2/sqrt(pi)) * \int_0^x e^{-t^2} dt.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SpecialFunctions.Erfc``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes the Complementary Error Function erfc(x) = 1 - erf(x).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SpecialFunctions.Gamma``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes the Gamma function \Gamma(x) via Lanczos approximation.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SpecialFunctions.LogGamma``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes the natural logarithm of the absolute value of the Gamma function \ln|\Gamma(x)|.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SpecialFunctions.BesselI0``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes the Modified Bessel function of order 0: I_0(x).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SpecialFunctions.BesselJ0``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes the Bessel function of the first kind of order 0: J_0(x).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SpecialFunctions.BesselY0``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes the Bessel function of the second kind of order 0: Y_0(x) (Neumann function).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SpecialFunctions.BesselK0``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes the Modified Bessel function of the second kind of order 0: K_0(x).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SpecialFunctions.LambertW``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32)">
+            <summary>
+            Computes the Lambert W function W_k(x) where W(x) * exp(W(x)) = x via Halley's 3rd order iteration.
+            Supports principal branch k=0 (for x >= -1/e) and branch k=-1 (for -1/e &lt;= x &lt; 0).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SpecialFunctions.AiryAi``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes the Airy function of the first kind: Ai(x).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SpecialFunctions.AiryBi``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes the Airy function of the second kind: Bi(x).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.LinAlg.SVD">
+            <summary>
+            Singular Value Decomposition (SVD) engine computing A = U * S * V^T for arbitrary rectangular matrices.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.LinAlg.SVD.Decompose``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes Singular Value Decomposition: A = U * diag(S) * V^T.
+            </summary>
+            <returns>(U: Left singular vectors, S: 1D Singular values, Vt: Right singular vectors transposed)</returns>
+        </member>
+        <member name="T:TokenVector.Numerics.Neural.Activations">
+            <summary>
+            Numerically stable activation functions with forward and backward gradient (VJP) kernels for Autograd.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.Activations.GELU``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes GELU activation using high-precision tanh approximation: 0.5 * x * (1 + tanh(sqrt(2/pi) * (x + 0.044715 * x^3))).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.Activations.Softmax``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32)">
+            <summary>
+            Computes Softmax along the specified axis using Log-Sum-Exp trick to eliminate floating-point overflow.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.Activations.SoftmaxBackward``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},System.Int32)">
+            <summary>
+            Computes Softmax gradient (Vector-Jacobian Product): gradInput = softmax * (gradOutput - sum(gradOutput * softmax, axis)).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Neural.AttentionEngine">
+            <summary>
+            Transformer Attention engine implementing Scaled Dot-Product Attention with Causal Masking and backward gradients.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.AttentionEngine.ScaledDotProductAttention``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes Scaled Dot-Product Attention: Softmax((Q * K^T) / sqrt(d_k) + Mask) * V.
+            Supports both 3D [Batch, SeqLen, D] and 4D [Batch, NumHeads, SeqLen, D] tensors.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.AttentionEngine.ScaledDotProductAttentionBackward``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes backward gradients for Scaled Dot-Product Attention with respect to Q, K, and V.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.AttentionEngine.CreateCausalMask``1(System.Int32,``0)">
+            <summary>
+            Generates standard autoregressive causal upper-triangular mask with large negative values for future tokens.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.AttentionEngine.ApplyRoPE(TokenVector.Numerics.Core.NDArray{System.Double},System.Int32,System.Double)">
+            <summary>
+            Applies Rotary Positional Embedding (RoPE) to Query or Key tensor of shape [..., SeqLen, HeadDim].
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Neural.ConvEngine">
+            <summary>
+            High-performance Convolutional Neural Network engine based on im2col, MatMul, and Pooling operators.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.ConvEngine.Im2Col``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Transforms image tensor [N, C, H, W] into column matrix for fast MatMul convolution.
+            Output shape: [C * Kh * Kw, N * OutH * OutW].
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.ConvEngine.Conv2D``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Performs 2D Convolution Forward pass: Output = Weights * Im2Col(Input) + Bias.
+            Input: [N, C_in, H, W], Weights: [C_out, C_in, Kh, Kw], Bias: [C_out] (optional).
+            Output: [N, C_out, OutH, OutW].
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.ConvEngine.MaxPool2D``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Performs 2D Max Pooling on tensor [N, C, H, W].
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Neural.Losses">
+            <summary>
+            Deep learning loss functions and analytical gradient estimators (MSE, CrossEntropy with Fused Softmax).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.Losses.MSELoss``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes Mean Squared Error loss: (1/N) * sum((predictions - targets)^2).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.Losses.MSELossBackward``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes gradient of MSE loss with respect to predictions: (2/N) * (predictions - targets).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.Losses.CrossEntropyLoss``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{System.Int32})">
+            <summary>
+            Computes Cross-Entropy loss with fused Softmax for numerical stability.
+            Logits: [BatchSize, NumClasses], TargetClasses: [BatchSize].
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.Losses.CrossEntropyLossBackward``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{System.Int32})">
+            <summary>
+            Computes gradient of Cross-Entropy loss with respect to logits: (1/BatchSize) * (Softmax(logits) - OneHot(targets)).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Neural.Normalization">
+            <summary>
+            Neural network normalization layers: LayerNorm and BatchNorm with forward and backward gradients.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.Normalization.LayerNorm``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},System.Nullable{``0})">
+            <summary>
+            Computes Layer Normalization over the last normalized shape dimensions.
+            y = gamma * ((x - mean) / sqrt(var + eps)) + beta.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.Normalization.RMSNorm``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},System.Nullable{``0})">
+            <summary>
+            Computes Root Mean Square Normalization (RMSNorm): y = (x / sqrt(mean(x^2) + eps)) * gamma.
+            Widely used in modern LLMs (LLaMA, Mistral, Gemma, DeepSeek).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Neural.OptimalTransportAndDiffusion">
+            <summary>
+            Provides entropic Optimal Transport (Sinkhorn Algorithm / Wasserstein Distance) and Generative Diffusion Sampling (DDIM / SDE score-based steps).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.OptimalTransportAndDiffusion.Sinkhorn(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Int32,System.Double)">
+            <summary>
+            Computes the entropic regularized Optimal Transport distance (Sinkhorn Distance / Wasserstein-1/2) between probability distributions a and b given cost matrix M.
+            min_{P} &lt;P, M&gt; + reg * KL(P || a (x) b)
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Neural.OptimalTransportAndDiffusion.DDIMStep(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Double,System.Double)">
+            <summary>
+            Computes one deterministic sampling step for Generative Diffusion Models using Denoising Diffusion Implicit Models (DDIM).
+            x_t: current noisy sample, predictedNoise: model output epsilon_theta(x_t, t),
+            alpha_t: cumulative alpha product \bar{alpha}_t, alpha_prev: \bar{alpha}_{t-1}.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Ops.BitwiseOps">
+            <summary>
+            Provides bitwise logical and shifting operations on integer tensors (np.bitwise_and, np.bitwise_or, np.bitwise_xor, np.bitwise_not, np.left_shift, np.right_shift).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.BitwiseOps.BitwiseAnd``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes bitwise AND of two integer tensors element-wise (np.bitwise_and).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.BitwiseOps.BitwiseOr``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes bitwise OR of two integer tensors element-wise (np.bitwise_or).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.BitwiseOps.BitwiseXor``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes bitwise XOR of two integer tensors element-wise (np.bitwise_xor).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.BitwiseOps.BitwiseNot``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes bitwise NOT (inversion) of an integer tensor element-wise (np.bitwise_not / ~a).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.BitwiseOps.LeftShift``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32)">
+            <summary>
+            Shifts the bits of an integer tensor to the left (np.left_shift / a &lt;&lt; shift).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.BitwiseOps.RightShift``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32)">
+            <summary>
+            Shifts the bits of an integer tensor to the right (np.right_shift / a &gt;&gt; shift).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Ops.ComparisonOps">
+            <summary>
+            Elementwise comparison operations for NDArray returning BoolNDArray.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Ops.CumulativeOps">
+            <summary>
+            Provides cumulative operations and discrete differences along arbitrary axes (np.cumsum, np.cumprod, np.diff).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.CumulativeOps.CumSum``1(TokenVector.Numerics.Core.NDArray{``0},System.Nullable{System.Int32})">
+            <summary>
+            Computes the cumulative sum of elements along a given axis or flattened array.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.CumulativeOps.CumProd``1(TokenVector.Numerics.Core.NDArray{``0},System.Nullable{System.Int32})">
+            <summary>
+            Computes the cumulative product of elements along a given axis or flattened array.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.CumulativeOps.Diff``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32,System.Int32)">
+            <summary>
+            Computes the n-th discrete difference along the given axis (np.diff).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Ops.ElementWiseMathOps">
+            <summary>
+            Comprehensive element-wise mathematical, trigonometric, hyperbolic, exponential, logarithmic, and rounding operations on NDArrays.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Ops.GridOps">
+            <summary>
+            Provides grid generation and structured matrix extraction operations (np.meshgrid, np.diag, np.triu, np.tril).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.GridOps.Meshgrid``1(TokenVector.Numerics.Core.NDArray{``0}[])">
+            <summary>
+            Generates coordinate matrices from coordinate vectors (np.meshgrid).
+            Defaults to 'xy' indexing for 2D vectors: (len(y), len(x)).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.GridOps.Diag``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32)">
+            <summary>
+            Extracts a diagonal or constructs a diagonal array (np.diag).
+            If input is 1D vector: returns 2D square matrix with vector on k-th diagonal.
+            If input is 2D matrix: returns 1D vector containing elements of k-th diagonal.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.GridOps.Diagonal``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32)">
+            <summary>
+            Returns specified diagonals of a 2D matrix (np.diagonal).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.GridOps.Triu``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32)">
+            <summary>
+            Upper triangle of an array (np.triu).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.GridOps.Tril``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32)">
+            <summary>
+            Lower triangle of an array (np.tril).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Ops.IndexingOps">
+            <summary>
+            Advanced Fancy Indexing, Boolean Masking, Where, Take (Gather) and Put (Scatter) operations.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.IndexingOps.Filter``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.BoolNDArray)">
+            <summary>
+            Filters tensor elements where the boolean mask is true, returning a flat 1D NDArray (equivalent to arr[mask]).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.IndexingOps.SetWhere``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.BoolNDArray,``0)">
+            <summary>
+            In-place assignment to tensor elements where the boolean mask is true: tensor[mask] = value.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.IndexingOps.Where``1(TokenVector.Numerics.Core.BoolNDArray,TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Selects elements from x when condition is true, and from y when condition is false (equivalent to np.where).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.IndexingOps.Take``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{System.Int32},System.Int32)">
+            <summary>
+            Gathers slices from a tensor along an axis according to integer indices (equivalent to np.take).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.IndexingOps.Put``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{System.Int32},TokenVector.Numerics.Core.NDArray{``0},System.Int32)">
+            <summary>
+            Scatters values into tensor along an axis according to integer indices (equivalent to np.put_along_axis).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Ops.LogicToleranceOps">
+            <summary>
+            Provides tolerance-based equality testing, boolean reductions, and floating-point status checks (np.isclose, np.allclose, np.all, np.any, np.isnan, np.isinf, np.isfinite).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.LogicToleranceOps.IsClose``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},System.Double,System.Double)">
+            <summary>
+            Returns a boolean tensor where two arrays are element-wise equal within a given tolerance (np.isclose).
+            Condition: |a - b| &lt;= (atol + rtol * |b|)
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.LogicToleranceOps.AllClose``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0},System.Double,System.Double)">
+            <summary>
+            Returns true if two arrays are element-wise equal within a tolerance (np.allclose).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.LogicToleranceOps.All(TokenVector.Numerics.Core.BoolNDArray)">
+            <summary>
+            Evaluates whether all elements evaluate to true over the entire tensor.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.LogicToleranceOps.Any(TokenVector.Numerics.Core.BoolNDArray)">
+            <summary>
+            Evaluates whether any element evaluates to true over the entire tensor.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.LogicToleranceOps.All(TokenVector.Numerics.Core.BoolNDArray,System.Int32)">
+            <summary>
+            Evaluates all along a given axis.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.LogicToleranceOps.Any(TokenVector.Numerics.Core.BoolNDArray,System.Int32)">
+            <summary>
+            Evaluates any along a given axis.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.LogicToleranceOps.IsNaN``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Returns a boolean array indicating where elements are NaN (np.isnan).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.LogicToleranceOps.IsInf``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Returns a boolean array indicating where elements are positive or negative infinity (np.isinf).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.LogicToleranceOps.IsFinite``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Returns a boolean array indicating where elements are finite (not NaN, not Inf) (np.isfinite).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Ops.ManipulationOps">
+            <summary>
+            Tensor structural manipulation operations: Concatenate, Stack, Split, Tile, Repeat, Pad, Roll, and Flip.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.ManipulationOps.Concatenate``1(System.Collections.Generic.IReadOnlyList{TokenVector.Numerics.Core.NDArray{``0}},System.Int32)">
+            <summary>
+            Joins a sequence of tensors along an existing axis (equivalent to np.concatenate).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.ManipulationOps.Stack``1(System.Collections.Generic.IReadOnlyList{TokenVector.Numerics.Core.NDArray{``0}},System.Int32)">
+            <summary>
+            Joins a sequence of tensors along a new axis (equivalent to np.stack).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.ManipulationOps.VStack``1(TokenVector.Numerics.Core.NDArray{``0}[])">
+            <summary>
+            Stacks tensors vertically (row wise) -> equivalent to np.vstack.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.ManipulationOps.HStack``1(TokenVector.Numerics.Core.NDArray{``0}[])">
+            <summary>
+            Stacks tensors horizontally (column wise) -> equivalent to np.hstack.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.ManipulationOps.Split``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32,System.Int32)">
+            <summary>
+            Splits tensor into multiple sub-tensors along an axis (equivalent to np.split).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.ManipulationOps.Tile``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32[])">
+            <summary>
+            Constructs a tensor by repeating tensor dimensions the number of times given by reps (equivalent to np.tile).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.ManipulationOps.Repeat``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            Repeats elements of a tensor (equivalent to np.repeat).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.ManipulationOps.Pad``1(TokenVector.Numerics.Core.NDArray{``0},System.ValueTuple{System.Int32,System.Int32}[],``0)">
+            <summary>
+            Pads a tensor with constant values (equivalent to np.pad).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.ManipulationOps.Roll``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            Rolls tensor elements along a given axis (equivalent to np.roll).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.ManipulationOps.Flip``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32)">
+            <summary>
+            Reverses the order of elements along the given axis (equivalent to np.flip).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Ops.SetOperations">
+            <summary>
+            Provides 1D set operations on tensors (np.intersect1d, np.union1d, np.setdiff1d, np.setxor1d, np.isin).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.SetOperations.Intersect1D``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Find the intersection of two arrays. Return the sorted, unique values that are in both of the input arrays.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.SetOperations.Union1D``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Find the union of two arrays. Return the unique, sorted array of values that are in either of the two input arrays.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.SetOperations.SetDiff1D``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Find the set difference of two arrays. Return the unique values in ar1 that are not in ar2.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.SetOperations.SetXor1D``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Find the set exclusive-or (symmetric difference) of two arrays.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.SetOperations.IsIn``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Calculates element-wise whether each element of `element` is in `testElements` (np.isin).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Ops.SortingOps">
+            <summary>
+            Tensor sorting, searching, partition, and element clipping operations (Sort, ArgSort, Unique, NonZero, Clip).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.SortingOps.Sort``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32,System.Boolean)">
+            <summary>
+            Returns a sorted copy of the tensor along the specified axis (equivalent to np.sort).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.SortingOps.ArgSort``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32,System.Boolean)">
+            <summary>
+            Returns the indices that would sort the tensor along the specified axis (equivalent to np.argsort).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.SortingOps.Unique``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Finds the unique sorted elements of a tensor (equivalent to np.unique).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.SortingOps.NonZero``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Returns the indices of the elements that are non-zero (equivalent to np.nonzero).
+            Output shape: [Rank, NumNonZeros].
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.SortingOps.Clip``1(TokenVector.Numerics.Core.NDArray{``0},``0,``0)">
+            <summary>
+            Clamps tensor values within a range [min, max] (equivalent to np.clip).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Ops.StatisticsOps">
+            <summary>
+            Statistical and probabilistic functions: Variance, Standard Deviation, Median, Percentile, Covariance, and Correlation Coefficients.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.StatisticsOps.Var``1(TokenVector.Numerics.Core.NDArray{``0},System.Nullable{System.Int32},System.Boolean,System.Int32)">
+            <summary>
+            Computes variance along the specified axis (equivalent to np.var).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.StatisticsOps.Std``1(TokenVector.Numerics.Core.NDArray{``0},System.Nullable{System.Int32},System.Boolean,System.Int32)">
+            <summary>
+            Computes standard deviation along the specified axis (equivalent to np.std).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.StatisticsOps.Median``1(TokenVector.Numerics.Core.NDArray{``0},System.Nullable{System.Int32},System.Boolean)">
+            <summary>
+            Computes median along the specified axis (equivalent to np.median).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.StatisticsOps.Percentile``1(TokenVector.Numerics.Core.NDArray{``0},System.Double,System.Nullable{System.Int32},System.Boolean)">
+            <summary>
+            Computes the q-th percentile of data along the specified axis (q in [0, 100]).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.StatisticsOps.Cov``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes sample covariance matrix between variables (equivalent to np.cov).
+            Input: [NumVariables, NumObservations].
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Ops.StatisticsOps.CorrCoef``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes Pearson correlation coefficients matrix (equivalent to np.corrcoef).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Optimize.OptimizationAndRootFinding">
+            <summary>
+            Numerical Optimization and Root Finding algorithms (Brent 1D, Nelder-Mead Simplex, BFGS Quasi-Newton, Brentq Roots, Levenberg-Marquardt CurveFit, Simplex LP).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Optimize.OptimizationAndRootFinding.RootBrentq(System.Func{System.Double,System.Double},System.Double,System.Double,System.Double,System.Int32)">
+            <summary>
+            Finds a zero of a continuous function f in the interval [a, b] using Brent's method (brentq).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Optimize.OptimizationAndRootFinding.Bisection(System.Func{System.Double,System.Double},System.Double,System.Double,System.Double,System.Int32)">
+            <summary>
+            Bisection method to find root in [a, b].
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Optimize.OptimizationAndRootFinding.MinimizeBrent(System.Func{System.Double,System.Double},System.Double,System.Double,System.Double,System.Int32)">
+            <summary>
+            Finds local minimum of 1D scalar function in [a, b] using Brent's golden section + parabolic interpolation.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Optimize.OptimizationAndRootFinding.MinimizeNelderMead(System.Func{TokenVector.Numerics.Core.NDArray{System.Double},System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Int32)">
+            <summary>
+            Nelder-Mead Downhill Simplex algorithm for multidimensional unconstrained optimization without derivatives.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Optimize.OptimizationAndRootFinding.MinimizeBFGS(System.Func{TokenVector.Numerics.Core.NDArray{System.Double},System.Double},System.Func{TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double}},TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Int32)">
+            <summary>
+            BFGS Quasi-Newton optimization algorithm.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Optimize.OptimizationAndRootFinding.LinearProgramSimplex(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Int32)">
+            <summary>
+            Solves linear program: Minimize c^T x subject to A x &lt;= b, x &gt;= 0.
+            Returns optimal x and optimal objective value.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Optimize.OptimizationAndRootFinding.QPSolve(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Double,System.Double,System.Int32)">
+            <summary>
+            Solves Convex Quadratic Program:
+            Minimize (1/2) * x^T * P * x + q^T * x
+            Subject to: G * x &lt;= h (inequality), A * x == b (equality), lb &lt;= x &lt;= ub (box bounds).
+            Uses Operator-Splitting ADMM (Alternating Direction Method of Multipliers) matching OSQP standard.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Physics.LatticeBoltzmann2D">
+            <summary>
+            Provides 2D Lattice Boltzmann Method (LBM D2Q9) incompressible fluid dynamics simulation.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Physics.LatticeBoltzmann2D.InitializeEquilibrium(System.Int32,System.Int32,System.Double,System.Double,System.Double)">
+            <summary>
+            Initializes a D2Q9 distribution function tensor [Ny, Nx, 9] with equilibrium values.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Physics.LatticeBoltzmann2D.Step(TokenVector.Numerics.Core.NDArray{System.Double},System.Double,TokenVector.Numerics.Core.BoolNDArray)">
+            <summary>
+            Executes one single time-step of D2Q9 Lattice Boltzmann simulation with BGK collision and streaming.
+            F: distribution functions shape [Ny, Nx, 9], Tau: relaxation time.
+            Returns macroscopic Density [Ny, Nx], Velocity U [Ny, Nx], and Velocity V [Ny, Nx].
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Physics.PhysicsODEAndFields">
+            <summary>
+            Provides computational physics engines: Runge-Kutta 4th Order ODE integrator, N-Body Gravitational Symplectic Verlet Integrator, and 3D Vector Calculus (Gradient, Divergence, Curl, Laplacian).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Physics.PhysicsODEAndFields.SolveRK4(System.Func{System.Double,TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double}},System.Double,System.Double,TokenVector.Numerics.Core.NDArray{System.Double},System.Int32)">
+            <summary>
+            Integrates a system of ordinary differential equations dy/dt = f(t, y) from t0 to tEnd using classical Runge-Kutta 4th order (RK4).
+            Returns an array of state vectors at each time step.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Physics.PhysicsODEAndFields.SolveSymplecticVerlet(System.Func{TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double}},System.Double,System.Double,TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Int32)">
+            <summary>
+            Integrates a general Hamiltonian dynamical system H(q, p) = (1/2m) p^T p + V(q) with force F(q) = -\nabla V(q)
+            using the energy-preserving symplectic Leapfrog / Velocity-Verlet method from t0 to tEnd.
+            Preserves phase-space symplectic 2-form and total energy with zero secular drift.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Physics.PhysicsODEAndFields.NBodyVerletStep(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Double,System.Double)">
+            <summary>
+            Advances an N-body gravitational system by time step dt using Symplectic Velocity-Verlet integration.
+            Positions: [N, 3], Velocities: [N, 3], Masses: [N].
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Physics.PhysicsODEAndFields.Gradient3D(TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Double,System.Double)">
+            <summary>
+            Computes 3D Gradient (\nabla f) of a scalar field of shape [Nx, Ny, Nz].
+            Returns 3 scalar fields (dF/dx, dF/dy, dF/dz).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Physics.PhysicsODEAndFields.Divergence3D(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Double,System.Double)">
+            <summary>
+            Computes 3D Divergence (\nabla \cdot F) of a vector field F = (fx, fy, fz).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Physics.PhysicsODEAndFields.Curl3D(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Double,System.Double)">
+            <summary>
+            Computes 3D Curl (\nabla \times F) of a vector field F = (fx, fy, fz).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Physics.PhysicsODEAndFields.Laplacian3D(TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Double,System.Double)">
+            <summary>
+            Computes 3D Laplacian (\nabla^2 f = \nabla \cdot \nabla f) of a scalar field.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Quantum.QState">
+            <summary>
+            Provides high-performance N-Qubit quantum statevector simulation, universal quantum gates (H, X, Y, Z, CNOT, Toffoli), measurement collapse, and density matrix entropy.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.H(System.Int32)">
+            <summary>
+            Applies Hadamard gate H = (1/sqrt(2)) * [[1, 1], [1, -1]] to target qubit.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.X(System.Int32)">
+            <summary>
+            Applies Pauli-X (NOT) gate: [[0, 1], [1, 0]] to target qubit.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.Y(System.Int32)">
+            <summary>
+            Applies Pauli-Y gate: [[0, -i], [i, 0]] to target qubit.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.Z(System.Int32)">
+            <summary>
+            Applies Pauli-Z (Phase Flip) gate: [[1, 0], [0, -1]] to target qubit.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.S(System.Int32)">
+            <summary>
+            Applies Phase gate S: [[1, 0], [0, i]] to target qubit.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.T(System.Int32)">
+            <summary>
+            Applies T (pi/8) gate: [[1, 0], [0, e^{i*pi/4}]] to target qubit.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.Rz(System.Int32,System.Double)">
+            <summary>
+            Applies arbitrary rotation gate Rz(theta) around Z-axis: [[e^{-i*theta/2}, 0], [0, e^{i*theta/2}]].
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.CNOT(System.Int32,System.Int32)">
+            <summary>
+            Applies Controlled-NOT (CNOT) gate between control and target qubits.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.Toffoli(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Applies Toffoli (CCNOT) gate with two control qubits and one target qubit.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.CZ(System.Int32,System.Int32)">
+            <summary>
+            Applies Controlled-Z (CZ) gate.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.SWAP(System.Int32,System.Int32)">
+            <summary>
+            Applies SWAP gate between qubit1 and qubit2.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.CRz(System.Int32,System.Int32,System.Double)">
+            <summary>
+            Applies Controlled-Rz gate.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.QFT">
+            <summary>
+            Executes full Quantum Fourier Transform (QFT) circuit on all N qubits.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.ProbabilityOne(System.Int32)">
+            <summary>
+            Computes probability of measuring target qubit in state |1>.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.GetProbabilities">
+            <summary>
+            Gets probability distribution across all 2^N basis states.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.DensityMatrix">
+            <summary>
+            Computes pure state density matrix rho = |psi&gt;&lt;psi| (dim x dim).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.VonNeumannEntropy">
+            <summary>
+            Computes the Von Neumann Entropy of the current quantum state.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.Measure(System.Int32,System.Random)">
+            <summary>
+            Measures target qubit, collapsing the statevector according to Born's Rule. Returns measured outcome (0 or 1).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Quantum.QState.VonNeumannEntropy(TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Computes the Von Neumann Entropy of an arbitrary density matrix rho: S(rho) = -Tr(rho * ln(rho)).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Random.TensorRandom">
+            <summary>
+            Pseudo-random number generator engine for tensors supporting Uniform, Gaussian Normal, Discrete Integer, Choice, and Shuffle.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Random.TensorRandom.ManualSeed(System.Int32)">
+            <summary>
+            Sets the global seed for reproducible random tensor generation.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Random.TensorRandom.Rand``1(System.Int32[])">
+            <summary>
+            Generates tensor with random values drawn uniformly from [0, 1).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Random.TensorRandom.Randn``1(``0,``0,System.Int32[])">
+            <summary>
+            Generates tensor with random values drawn from Standard Normal distribution N(mean, std^2) using the Box-Muller transform.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Random.TensorRandom.Randn``1(System.Int32[])">
+            <summary>
+            Generates standard normal tensor N(0, 1).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Random.TensorRandom.Randint(System.Int32,System.Int32,System.Int32[])">
+            <summary>
+            Generates tensor with random integer values drawn uniformly from [low, high).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Random.TensorRandom.Shuffle``1(TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Randomly permutes a tensor in-place along axis 0 using the Fisher-Yates algorithm.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Random.TensorRandom.Choice``1(TokenVector.Numerics.Core.NDArray{``0},System.Int32,System.Boolean)">
+            <summary>
+            Generates a random sample from a given 1D tensor.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Robotics.OptimalControlAndRobotics">
+            <summary>
+            Frontier robotics, optimal control, and kinematic dynamics algorithms.
+            Includes Discrete and Continuous Algebraic Riccati Equations (LQR) and Damped Least Squares (DLS) Inverse Kinematics.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Robotics.OptimalControlAndRobotics.SolveDiscreteLQR(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Int32,System.Double)">
+            <summary>
+            Solves the Discrete-time Linear Quadratic Regulator (LQR) problem.
+            Minimizes sum of (x' Q x + u' R u) subject to x_{k+1} = A x_k + B u_k.
+            Returns the optimal feedback gain matrix K such that u = -K x, and the Riccati matrix P.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Robotics.OptimalControlAndRobotics.JacobianDLS(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Double)">
+            <summary>
+            Inverse Kinematics step via Damped Least Squares (DLS / Levenberg-Marquardt IK):
+            \Delta \theta = J^T (J J^T + \lambda^2 I)^{-1} \Delta x
+            Prevents singularities and numerical instability in robotic arm manipulability.
+            </summary>
+            <param name="jacobian">Robotic Jacobian matrix (m x n).</param>
+            <param name="deltaX">End-effector task space Cartesian error / velocity (m x 1 or 1D array length m).</param>
+            <param name="lambda">Damping factor (lambda > 0).</param>
+            <returns>Joint angle velocity / step Delta theta (n x 1 or 1D).</returns>
+        </member>
+        <member name="M:TokenVector.Numerics.Robotics.OptimalControlAndRobotics.UnicycleKinematics(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            2D Unicycle / Differential Drive mobile robot forward kinematics step.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Science.Astrodynamics">
+            <summary>
+            Provides orbital mechanics, Keplerian orbit propagation, Hohmann transfers, and geodetic coordinate transformations for aerospace engineering.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Science.Astrodynamics.SolveKepler(System.Double,System.Double,System.Double,System.Int32)">
+            <summary>
+            Solves Kepler's Equation M = E - e*sin(E) for Eccentric Anomaly E using Newton-Raphson with cubic Halley starter.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Science.Astrodynamics.KeplerianToCartesian(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Converts 6 Keplerian orbital elements (a, e, i, raan, omega, nu) to Cartesian position (r) and velocity (v) vectors in km and km/s.
+            Angles must be in radians.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Science.Astrodynamics.HohmannTransfer(System.Double,System.Double,System.Double)">
+            <summary>
+            Computes Hohmann transfer Delta-V and time-of-flight between two coplanar circular orbits with radii r1 and r2.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Science.Astrodynamics.GeodeticToEcef(System.Double,System.Double,System.Double)">
+            <summary>
+            Converts WGS84 Geodetic Coordinates (lat, lon in degrees, altitude in km) to ECEF Cartesian Coordinates (X, Y, Z in km).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Science.Astrodynamics.EcefToGeodetic(System.Double,System.Double,System.Double)">
+            <summary>
+            Converts ECEF Cartesian Coordinates (X, Y, Z in km) to WGS84 Geodetic Coordinates (lat, lon in degrees, altitude in km) via Bowring's method.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Science.Astrodynamics.J2Perturbation(TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Double)">
+            <summary>
+            J2 Perturbation Earth gravitational potential acceleration step.
+            J2 = 1.08263e-3.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Science.Astrodynamics.BiEllipticTransfer(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Computes Bi-Elliptic transfer delta-v between initial circular orbit r1 and final circular orbit r2 via intermediate apogee rB.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Science.Astrodynamics.GibbsOrbitDetermination(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Double)">
+            <summary>
+            Gibbs Orbit Determination: computes velocity vector v2 at position r2 from 3 coplanar position vectors r1, r2, r3.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Science.Astrodynamics.ECI_To_ECEF(TokenVector.Numerics.Core.NDArray{System.Double},System.Double)">
+            <summary>
+            Converts ECI (J2000) position vector to ECEF (ITRF) given Greenwich Mean Sidereal Time (GMST in radians).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Spatial.Affine3D">
+            <summary>
+            Computer graphics and 3D spatial transformations: 4x4 Affine matrices, Camera projections, Vector Dot and Cross products.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Affine3D.Translation``1(``0,``0,``0)">
+            <summary>
+            Creates a 4x4 3D translation matrix.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Affine3D.Scaling``1(``0,``0,``0)">
+            <summary>
+            Creates a 4x4 3D scaling matrix.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Affine3D.RotationX``1(``0)">
+            <summary>
+            Creates a 4x4 rotation matrix around X-axis (angle in radians).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Affine3D.RotationY``1(``0)">
+            <summary>
+            Creates a 4x4 rotation matrix around Y-axis (angle in radians).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Affine3D.RotationZ``1(``0)">
+            <summary>
+            Creates a 4x4 rotation matrix around Z-axis (angle in radians).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Affine3D.RotationAxisAngle``1(``0,``0,``0,``0)">
+            <summary>
+            Creates a 4x4 rotation matrix around an arbitrary axis vector.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Affine3D.LookAt``1(System.ValueTuple{``0,``0,``0},System.ValueTuple{``0,``0,``0},System.ValueTuple{``0,``0,``0})">
+            <summary>
+            Creates a View Matrix (LookAt camera).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Affine3D.PerspectiveFov``1(``0,``0,``0,``0)">
+            <summary>
+            Creates a Perspective projection matrix.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Affine3D.Orthographic``1(``0,``0,``0,``0)">
+            <summary>
+            Creates an Orthographic projection matrix.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Affine3D.Cross``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes 3D cross product of two 3-element vectors: a x b.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Affine3D.Dot``1(TokenVector.Numerics.Core.NDArray{``0},TokenVector.Numerics.Core.NDArray{``0})">
+            <summary>
+            Computes dot product of two 1D vectors.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Spatial.Geometry3DAndPointClouds">
+            <summary>
+            Provides advanced 3D computational geometry, point cloud registration (Iterative Closest Point - ICP), ray tracing intersections, and coordinate frames.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Geometry3DAndPointClouds.PointToPlaneDistance(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Computes signed and absolute distance from a 3D point to a plane defined by a point and unit normal vector.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Geometry3DAndPointClouds.PointToSegmentDistance(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Computes minimum Euclidean distance from a point P to a line segment AB.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Geometry3DAndPointClouds.RayTriangleIntersect(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Möller–Trumbore Ray-Triangle Intersection algorithm.
+            Returns (hasHit, distance t, barycentric u, barycentric v).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Geometry3DAndPointClouds.AABBIntersect(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Checks if two 3D Axis-Aligned Bounding Boxes (AABB) intersect.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Geometry3DAndPointClouds.AlignPointCloudsKabsch(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Aligns source point cloud to target point cloud using Kabsch/SVD rigid registration step (Rotation R [3, 3] and Translation t [3]).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Geometry3DAndPointClouds.CartesianToSpherical(System.Double,System.Double,System.Double)">
+            <summary>
+            Converts Cartesian (x, y, z) to Spherical (r, theta [azimuth], phi [inclination from +z]).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Geometry3DAndPointClouds.SphericalToCartesian(System.Double,System.Double,System.Double)">
+            <summary>
+            Converts Spherical (r, theta, phi) to Cartesian (x, y, z).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Spatial.HyperbolicGeometry">
+            <summary>
+            Non-Euclidean Hyperbolic Geometry algorithms for Poincaré ball and Lorentz / Hyperboloid models.
+            Widely used in modern Graph Neural Networks, hierarchical representation learning, and general relativity.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.HyperbolicGeometry.PoincareDistance(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Double)">
+            <summary>
+            Computes the geodesic distance between two points in the Poincaré ball model with curvature c.
+            d_c(u, v) = (2 / sqrt(c)) * artanh( sqrt(c) * || -u (+) v || )
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.HyperbolicGeometry.MobiusAddition(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.Double)">
+            <summary>
+            Computes Möbius addition u (+) v on the Poincaré ball with curvature c.
+            u (+) v = ((1 + 2c&lt;u,v&gt; + c||v||^2)u + (1 - c||u||^2)v) / (1 + 2c&lt;u,v&gt; + c^2||u||^2||v||^2)
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.HyperbolicGeometry.ExpMap0(TokenVector.Numerics.Core.NDArray{System.Double},System.Double)">
+            <summary>
+            Exponential map at origin projecting tangent space vector v onto the Poincaré ball.
+            exp_0^c(v) = tanh(sqrt(c) ||v||) * (v / (sqrt(c) ||v||))
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.HyperbolicGeometry.LogMap0(TokenVector.Numerics.Core.NDArray{System.Double},System.Double)">
+            <summary>
+            Logarithmic map at origin mapping a point y in the Poincaré ball back to the tangent space.
+            log_0^c(y) = artanh(sqrt(c) ||y||) * (y / (sqrt(c) ||y||))
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Spatial.Quaternion`1">
+            <summary>
+            4D Quaternion struct for smooth 3D rotations, spatial algebra, and Spherical Linear Interpolation (Slerp).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Quaternion`1.FromAxisAngle(`0,`0,`0,`0)">
+            <summary>
+            Creates a quaternion from an axis vector and rotation angle in radians.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Quaternion`1.FromEuler(`0,`0,`0)">
+            <summary>
+            Creates a quaternion from Euler angles (Yaw: Y, Pitch: X, Roll: Z in radians).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Quaternion`1.Slerp(TokenVector.Numerics.Spatial.Quaternion{`0},TokenVector.Numerics.Spatial.Quaternion{`0},`0)">
+            <summary>
+            Performs Spherical Linear Interpolation (Slerp) between two quaternions.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.Quaternion`1.ToRotationMatrix4x4">
+            <summary>
+            Converts quaternion to 4x4 rotation matrix.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Spatial.SpatialTreesAndGeometry">
+            <summary>
+            Spatial KD-Tree, 2D Convex Hull, Pairwise Distance Matrices (CDist), and Computational Polygon Geometry.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.SpatialTreesAndGeometry.ConvexHull2D(TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Computes the 2D convex hull of a set of points [N, 2] in O(N log N) using Andrew's monotone chain algorithm.
+            Returns the vertices of the convex hull in counter-clockwise order.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.SpatialTreesAndGeometry.CDist(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double},System.String)">
+            <summary>
+            Computes pairwise distance matrix between collections of points XA [mA, d] and XB [mB, d].
+            Metrics: "euclidean", "manhattan", "chebyshev", "cosine".
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.SpatialTreesAndGeometry.PointInPolygon(TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Double)">
+            <summary>
+            Tests whether point (x, y) is inside 2D polygon using Ray Casting algorithm.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Spatial.SpatialTreesAndGeometry.PolygonArea(TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Computes area of 2D polygon using Shoelace formula.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Statistics.DistributionsAndTests">
+            <summary>
+            Continuous Probability Distributions (PDF, CDF, Quantile/PPF), Hypothesis Testing (T-Test, ANOVA, Chi-Square, KS), and Moments (Skewness, Kurtosis).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Statistics.DistributionsAndTests.TTest1Sample(TokenVector.Numerics.Core.NDArray{System.Double},System.Double)">
+            <summary>
+            1-Sample Student's t-test comparing sample mean to population mean mu0.
+            Returns (T-Statistic, Estimated Two-Tailed P-Value).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Statistics.DistributionsAndTests.TTestInd(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Independent 2-Sample Student's t-test.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Statistics.DistributionsAndTests.ANOVA1Way(TokenVector.Numerics.Core.NDArray{System.Double}[])">
+            <summary>
+            1-Way Analysis of Variance (ANOVA) F-test across multiple groups.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Statistics.DistributionsAndTests.ChiSquareTest(TokenVector.Numerics.Core.NDArray{System.Double},TokenVector.Numerics.Core.NDArray{System.Double})">
+            <summary>
+            Pearson Chi-Square test for Goodness-of-Fit.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Statistics.TimeSeriesAndKalman">
+            <summary>
+            Provides advanced time-series forecasting (Holt-Winters, ACF, PACF) and optimal state estimation (Kalman Filter 1D &amp; Multi-Dimensional).
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Statistics.TimeSeriesAndKalman.KalmanFilter1D">
+            <summary>
+            1D Kalman Filter implementation for optimal state estimation with scalar Gaussian noise.
+            </summary>
+        </member>
+        <member name="T:TokenVector.Numerics.Statistics.TimeSeriesAndKalman.KalmanFilterND">
+            <summary>
+            Multi-Dimensional Linear Kalman Filter: x_k = F * x_{k-1} + w, z_k = H * x_k + v.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Statistics.TimeSeriesAndKalman.SimpleExponentialSmoothing(TokenVector.Numerics.Core.NDArray{System.Double},System.Double)">
+            <summary>
+            Simple Exponential Smoothing: S_t = alpha * Y_t + (1 - alpha) * S_{t-1}.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Statistics.TimeSeriesAndKalman.HoltLinearTrend(TokenVector.Numerics.Core.NDArray{System.Double},System.Double,System.Double,System.Int32)">
+            <summary>
+            Holt's Linear Trend Forecasting with alpha (level) and beta (trend).
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Statistics.TimeSeriesAndKalman.Autocorrelation(TokenVector.Numerics.Core.NDArray{System.Double},System.Int32)">
+            <summary>
+            Computes sample Autocorrelation Function (ACF) up to maxLag.
+            </summary>
+        </member>
+        <member name="M:TokenVector.Numerics.Statistics.TimeSeriesAndKalman.PartialAutocorrelation(TokenVector.Numerics.Core.NDArray{System.Double},System.Int32)">
+            <summary>
+            Computes sample Partial Autocorrelation Function (PACF) using Durbin-Levinson recursion.
+            </summary>
+        </member>
+    </members>
+</doc>
