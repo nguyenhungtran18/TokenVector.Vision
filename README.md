@@ -7,7 +7,42 @@
 [![SIMD Acceleration](https://img.shields.io/badge/SIMD-AVX2%20%7C%20FMA%20%7C%20SSE41-orange.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)]()
 
-**TokenVector.Vision** is an industrial-grade, zero-allocation computer vision and image transformation engine engineered for high-throughput AI pipelines, real-time video streams, and deep learning training/inference runtimes.
+**TokenVector.Vision** is an industrial-grade, Zero-GC computer vision and image transformation engine, built specifically for real-time deep learning and vision AI pipelines in the TokenVector Ecosystem.
+
+---
+
+## 🌐 The TokenVector AI Ecosystem Overview
+
+**TokenVector** is a next-generation AI and High-Performance Computing (HPC) ecosystem engineered entirely in **C# 12 / .NET 8/9 Native AOT**, designed to bring C++/CUDA-grade execution speed to modern .NET with **0% Garbage Collection overhead (Zero-GC)**:
+
+```
+                         ╔══════════════════════════════════════════════╗
+                         ║         THE TOKENVECTOR AI ECOSYSTEM         ║
+                         ╚══════════════════════════════════════════════╝
+                                                │
+         ┌────────────────────────┬─────────────┴────────────┬────────────────────────┐
+         ▼                        ▼                          ▼                        ▼
+┌──────────────────┐    ┌──────────────────┐       ┌──────────────────┐     ┌──────────────────┐
+│TokenVector.Vision│    │TokenVector.Numerics│     │ TokenVector.GPU  │     │ TokenVector.Data │
+│(Computer Vision  │    │  (Linear Algebra │       │(DirectX12/OpenCL │     │ (Data Pipeline & │
+│  2D & 3D Voxel)  │    │  & NDArray Core) │       │Compute Shaders)  │     │  Double-Buffer)  │
+└────────┬─────────┘    └────────┬─────────┘       └────────┬─────────┘     └────────┬─────────┘
+         │                       │                          │                        │
+         └───────────────────────┼──────────────────────────┴────────────────────────┘
+                                 ▼
+                     ┌────────────────────────┐
+                     │ TokenVector.Inference  │
+                     │  (Embedded Inference:  │
+                     │  YOLO, ViT, UNet3D)    │
+                     └────────────────────────┘
+```
+
+### Core Components in the Ecosystem:
+1. **[`TokenVector.Numerics`](https://github.com/nguyenhungtran18/TokenVector.Numerics)**: High-performance linear algebra and N-dimensional array (`NDArray<T>`) tensor core accelerated by AVX2/AVX-512/FMA intrinsics with zero-copy interoperability.
+2. **[`TokenVector.Vision`](https://github.com/nguyenhungtran18/TokenVector.Vision)**: 2D & 3D Volumetric vision engine, 1-Pass Fused SIMD transforms, YOLO Letterbox, NMS, and ImagePainter outperforming TorchVision and ImageSharp.
+3. **`TokenVector.GPU`**: Cross-platform GPU computing engine (Direct3D 12 Compute Shaders, OpenCL, Vulkan) optimized for AMD Radeon, NVIDIA GeForce, and Intel Arc.
+4. **`TokenVector.Data`**: High-throughput multi-threaded double-buffering prefetching pipeline eliminating I/O bottlenecks during model training.
+5. **`TokenVector.Inference`**: Lightweight embedded neural network execution engine running YOLO, Vision Transformers (ViT), CNNs, and UNet3D natively.
 
 ---
 

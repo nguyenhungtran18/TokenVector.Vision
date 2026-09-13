@@ -11,6 +11,41 @@
 
 ---
 
+## 🌐 Giới thiệu Hệ Sinh Thái TokenVector (The TokenVector AI Ecosystem)
+
+**TokenVector** là hệ sinh thái AI và Tính toán Hiệu năng cao (HPC) thế hệ mới được xây dựng hoàn toàn bằng **C# 12 / .NET 8/9 Native AOT**, hướng tới mục tiêu mang lại hiệu năng cấp độ C++/CUDA ngay trong môi trường Managed .NET với **0% áp lực Garbage Collection (Zero-GC)**:
+
+```
+                         ╔══════════════════════════════════════════════╗
+                         ║         THE TOKENVECTOR AI ECOSYSTEM         ║
+                         ╚══════════════════════════════════════════════╝
+                                                │
+         ┌────────────────────────┬─────────────┴────────────┬────────────────────────┐
+         ▼                        ▼                          ▼                        ▼
+┌──────────────────┐    ┌──────────────────┐       ┌──────────────────┐     ┌──────────────────┐
+│TokenVector.Vision│    │TokenVector.Numerics│     │ TokenVector.GPU  │     │ TokenVector.Data │
+│  (Thị giác AI    │    │ (Hạt nhân Số học │       │ (Tăng tốc Compute│     │ (Pipeline Dữ liệu│
+│ 2D & 3D Voxel)   │    │ Tensor & NDArray)│       │ DirectX12/OpenCL)│     │ & Streaming I/O) │
+└────────┬─────────┘    └────────┬─────────┘       └────────┬─────────┘     └────────┬─────────┘
+         │                       │                          │                        │
+         └───────────────────────┼──────────────────────────┴────────────────────────┘
+                                 ▼
+                     ┌────────────────────────┐
+                     │ TokenVector.Inference  │
+                     │(Động cơ Suy luận Mạng  │
+                     │  Nơ-ron: YOLO, ViT, 3D)│
+                     └────────────────────────┘
+```
+
+### Các Phân hệ Cốt lõi trong Hệ sinh thái:
+1. **[`TokenVector.Numerics`](https://github.com/nguyenhungtran18/TokenVector.Numerics)**: Hạt nhân tính toán số học, đại số tuyến tính và cấu trúc dữ liệu đa chiều `NDArray<T>`, tối ưu hoá bằng SIMD AVX2/AVX-512/FMA với chi phí Zero-Copy.
+2. **[`TokenVector.Vision`](https://github.com/nguyenhungtran18/TokenVector.Vision)**: Phân hệ Thị giác máy tính 2D/3D Volumetric, tiền xử lý ảnh 1-Pass Fused SIMD, YOLO Letterbox, NMS, và ImagePainter với hiệu năng vượt trội TorchVision và ImageSharp.
+3. **`TokenVector.GPU`**: Động cơ tăng tốc phần cứng đa nền tảng (Direct3D 12 Compute Shaders, OpenCL, Vulkan), tối ưu cho GPU AMD Radeon, NVIDIA GeForce, và Intel Arc.
+4. **`TokenVector.Data`**: Pipeline nạp trước dữ liệu đa luồng (Multi-threaded Double Buffering), triệt tiêu nghẽn I/O khi nạp dataset huấn luyện.
+5. **`TokenVector.Inference`**: Động cơ suy luận mạng nơ-ron nhúng siêu nhẹ, thực thi trực tiếp các mô hình YOLO, Vision Transformer (ViT), CNNs, và UNet3D.
+
+---
+
 ## 🎯 Tác dụng & Giá trị Cốt lõi của Thư viện
 
 ### 1. Tiền xử lý ảnh cho Mô hình AI / Deep Learning (CNN, ViT, YOLO, ResNet)
@@ -31,9 +66,15 @@ Thông qua [`NumericsBridge`](file:///d:/TokenVector.Vision/Interop/NumericsBrid
 
 ### 6. Bộ Công cụ Toàn Diện cho AI Object Detection (YOLO / DETR) & Annotation
 * **YOLO Letterbox Transform**: [`LetterboxTransform`](file:///d:/TokenVector.Vision/Detection/LetterboxTransform.cs) thay đổi kích thước ảnh giữ nguyên tỷ lệ khung hình (Aspect Ratio), đệm viền xám 114 chuẩn YOLOv8/v9/v11, tự động tính toán ma trận chuyển đổi ngược tọa độ [`LetterboxMetadata.InverseTransform`](file:///d:/TokenVector.Vision/Detection/LetterboxTransform.cs).
-* **Non-Maximum Suppression (NMS)**: Thuật toán lọc bỏ bounding box trùng lặp siêu nhanh [`NonMaximumSuppression.Filter`](file:///d:/TokenVector.Vision/Detection/NonMaximumSuppression.cs) đạt **3,183.7 NMS ops/giây** trên 1,000 hộp ứng viên mà không cấp phát đối tượng trên heap.
-* **Họa sĩ Trực quan Hóa (Zero-GC Annotation)**: [`ImagePainter`](file:///d:/TokenVector.Vision/Drawing/ImagePainter.cs) vẽ trực tiếp Bounding Box, nhãn văn bản (Text Tag với bảng chữ cái ASCII bitmap), điểm mốc (Keypoints), và mặt nạ mờ (Alpha Mask) trực tiếp lên unmanaged `ImageBuffer` đạt **156 FPS** trên khung ảnh 1080p.
+* **Non-Maximum Suppression (NMS)**: Thuật toán lọc bỏ bounding box trùng lặp siêu nhanh [`NonMaximumSuppression.Filter`](file:///d:/TokenVector.Vision/Detection/NonMaximumSuppression.cs) đạt **3,376.6 NMS ops/giây** trên 1,000 hộp ứng viên mà không cấp phát đối tượng trên heap.
+* **Họa sĩ Trực quan Hóa (Zero-GC Annotation)**: [`ImagePainter`](file:///d:/TokenVector.Vision/Drawing/ImagePainter.cs) vẽ trực tiếp Bounding Box, nhãn văn bản (Text Tag với bảng chữ cái ASCII bitmap), điểm mốc (Keypoints), và mặt nạ mờ (Alpha Mask) trực tiếp lên unmanaged `ImageBuffer` đạt **162 FPS** trên khung ảnh 1080p.
 * **Gộp Batch Contiguous Tensor**: [`BatchOps.StackNCHW`](file:///d:/TokenVector.Vision/Batching/BatchOps.cs) gộp mảng các ảnh $3 \times H \times W$ thành khối Tensor $N \times 3 \times H \times W$ liền mạch trong unmanaged RAM.
+
+### 7. Xử lý Ảnh Thể tích Không gian 3 Chiều Lớn (3D Volumetric AI Vision)
+* **Quản lý Thể tích Voxel Unmanaged**: [`Volume3DBuffer`](file:///d:/TokenVector.Vision/Volumetric/Volume3DBuffer.cs) quản lý bộ nhớ 3D unmanaged ($Depth \times Height \times Width \times Channels$) 64-byte aligned, hỗ trợ trích xuất lát cắt 2D zero-copy slice [`GetSlice(z)`](file:///d:/TokenVector.Vision/Volumetric/Volume3DBuffer.cs) và ROI 3D subvolume.
+* **Nội suy 3 Chiều Trilinear Resample**: [`Volume3DTransforms.ResampleTrilinear`](file:///d:/TokenVector.Vision/Volumetric/Volume3DTransforms.cs) nội suy 8 đỉnh góc 3D đạt **540+ MegaVoxels/giây** trên 28 luồng CPU mà không gây rác GC.
+* **Toán tử Không gian 3D**: Bộ lọc không gian làm mịn 3D [`FilterBox3D`](file:///d:/TokenVector.Vision/Volumetric/Volume3DTransforms.cs), giảm chiều 3D Max Pooling [`MaxPooling3D`](file:///d:/TokenVector.Vision/Volumetric/Volume3DTransforms.cs) cho các mạng nơ-ron 3D (UNet3D, 3D ResNet, CT/MRI scan segmentation).
+* **3D Bounding Box**: Struct [`BoundingBox3D`](file:///d:/TokenVector.Vision/Detection/BoundingBox3D.cs) cho bài toán 3D Object Detection (LiDAR PointCloud / 3D Medical Imaging) với hàm tính 3D IoU chính xác.
 
 ---
 

@@ -7,7 +7,42 @@
 [![SIMD Acceleration](https://img.shields.io/badge/SIMD-AVX2%20%7C%20FMA%20%7C%20SSE41-orange.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)]()
 
-**TokenVector.Vision** is an industrial-grade, zero-allocation computer vision and image transformation engine engineered for high-throughput AI pipelines, real-time video streams, and deep learning training/inference runtimes.
+**TokenVector.Vision** is an industrial-grade, Zero-GC computer vision and image transformation engine, built specifically for real-time deep learning and vision AI pipelines in the TokenVector Ecosystem.
+
+---
+
+## 🌐 The TokenVector AI Ecosystem Overview
+
+**TokenVector** is a next-generation AI and High-Performance Computing (HPC) ecosystem engineered entirely in **C# 12 / .NET 8/9 Native AOT**, designed to bring C++/CUDA-grade execution speed to modern .NET with **0% Garbage Collection overhead (Zero-GC)**:
+
+```
+                         ╔══════════════════════════════════════════════╗
+                         ║         THE TOKENVECTOR AI ECOSYSTEM         ║
+                         ╚══════════════════════════════════════════════╝
+                                                │
+         ┌────────────────────────┬─────────────┴────────────┬────────────────────────┐
+         ▼                        ▼                          ▼                        ▼
+┌──────────────────┐    ┌──────────────────┐       ┌──────────────────┐     ┌──────────────────┐
+│TokenVector.Vision│    │TokenVector.Numerics│     │ TokenVector.GPU  │     │ TokenVector.Data │
+│(Computer Vision  │    │  (Linear Algebra │       │(DirectX12/OpenCL │     │ (Data Pipeline & │
+│  2D & 3D Voxel)  │    │  & NDArray Core) │       │Compute Shaders)  │     │  Double-Buffer)  │
+└────────┬─────────┘    └────────┬─────────┘       └────────┬─────────┘     └────────┬─────────┘
+         │                       │                          │                        │
+         └───────────────────────┼──────────────────────────┴────────────────────────┘
+                                 ▼
+                     ┌────────────────────────┐
+                     │ TokenVector.Inference  │
+                     │  (Embedded Inference:  │
+                     │  YOLO, ViT, UNet3D)    │
+                     └────────────────────────┘
+```
+
+### Core Components in the Ecosystem:
+1. **[`TokenVector.Numerics`](https://github.com/nguyenhungtran18/TokenVector.Numerics)**: High-performance linear algebra and N-dimensional array (`NDArray<T>`) tensor core accelerated by AVX2/AVX-512/FMA intrinsics with zero-copy interoperability.
+2. **[`TokenVector.Vision`](https://github.com/nguyenhungtran18/TokenVector.Vision)**: 2D & 3D Volumetric vision engine, 1-Pass Fused SIMD transforms, YOLO Letterbox, NMS, and ImagePainter outperforming TorchVision and ImageSharp.
+3. **`TokenVector.GPU`**: Cross-platform GPU computing engine (Direct3D 12 Compute Shaders, OpenCL, Vulkan) optimized for AMD Radeon, NVIDIA GeForce, and Intel Arc.
+4. **`TokenVector.Data`**: High-throughput multi-threaded double-buffering prefetching pipeline eliminating I/O bottlenecks during model training.
+5. **`TokenVector.Inference`**: Lightweight embedded neural network execution engine running YOLO, Vision Transformers (ViT), CNNs, and UNet3D natively.
 
 ---
 
@@ -27,15 +62,19 @@ Through `NumericsBridge`, `ImageBuffer` binds directly into `NDArray<float>` or 
 
 ### 5. Classical Computer Vision & Multi-Threaded DataLoader
 * **Spatial Filters**: Includes 2D spatial convolution (`Convolution2D`), separable 1D Gaussian blur (`GaussianBlur`), Sobel/Laplacian gradient filters (`EdgeDetection`), and a full 5-stage Canny Edge Detector with Non-Maximum Suppression (`CannyDetector`).
-### 5. Classical Computer Vision & Multi-Threaded DataLoader
-* **Spatial Filters**: Includes 2D spatial convolution (`Convolution2D`), separable 1D Gaussian blur (`GaussianBlur`), Sobel/Laplacian gradient filters (`EdgeDetection`), and a full 5-stage Canny Edge Detector with Non-Maximum Suppression (`CannyDetector`).
 * **Vision DataLoader**: Implements a bounded-channel double-buffering prefetching pipeline (`VisionDataLoader`) that prepares Batch $N+1$ on unmanaged memory while Batch $N$ is being processed by compute kernels.
 
-### 6. Full-Stack AI Object Detection Suite (YOLO / DETR) & Annotation
-* **YOLO Letterbox Transform**: [`LetterboxTransform`](file:///d:/TokenVector.Vision/Detection/LetterboxTransform.cs) provides aspect-ratio-preserving resize with gray padding (default 114 for YOLOv8/v9/v11), including exact coordinate inversion mapping [`LetterboxMetadata.InverseTransform`](file:///d:/TokenVector.Vision/Detection/LetterboxTransform.cs).
-* **Non-Maximum Suppression (NMS)**: Zero-heap suppression engine [`NonMaximumSuppression.Filter`](file:///d:/TokenVector.Vision/Detection/NonMaximumSuppression.cs) executing **3,183.7 NMS operations/sec** on 1,000 dense YOLO candidate boxes.
-* **Zero-GC Visual Painter**: [`ImagePainter`](file:///d:/TokenVector.Vision/Drawing/ImagePainter.cs) renders Bounding Boxes, alpha masks, keypoints, and ASCII bitmap text labels directly onto unmanaged `ImageBuffer` at **156.0 FPS** on 1080p frames.
-* **Contiguous Batch Tensor Collation**: [`BatchOps.StackNCHW`](file:///d:/TokenVector.Vision/Batching/BatchOps.cs) merges individual $[C, H, W]$ buffers into a single unified $[N, C, H, W]$ tensor in contiguous unmanaged RAM.
+### 6. Full AI Object Detection (YOLO / DETR) & Annotation Suite
+* **YOLO Letterbox Transform**: [`LetterboxTransform`](file:///d:/TokenVector.Vision/Detection/LetterboxTransform.cs) aspect-ratio preserving resize with constant gray padding (114) and coordinate transformation inversion [`LetterboxMetadata.InverseTransform`](file:///d:/TokenVector.Vision/Detection/LetterboxTransform.cs).
+* **Non-Maximum Suppression (NMS)**: Fast [`NonMaximumSuppression.Filter`](file:///d:/TokenVector.Vision/Detection/NonMaximumSuppression.cs) achieving **3,376.6 NMS ops/sec** on 1,000 candidate boxes without heap allocations.
+* **Zero-GC Visual Painter**: [`ImagePainter`](file:///d:/TokenVector.Vision/Drawing/ImagePainter.cs) rendering Bounding Boxes, Text Tags (ASCII bitmap font), Keypoints, and Alpha Mask Blending at **162 FPS** on 1080p frames.
+* **Batch Planar Stack**: [`BatchOps.StackNCHW`](file:///d:/TokenVector.Vision/Batching/BatchOps.cs) merging $[C, H, W]$ images into contiguous unmanaged $[N, C, H, W]$ tensor blocks.
+
+### 7. 3D Volumetric & Large Spatial Dimension Processing (3D AI Vision)
+* **Unmanaged 3D Voxel Memory**: [`Volume3DBuffer`](file:///d:/TokenVector.Vision/Volumetric/Volume3DBuffer.cs) managing large 3D voxel arrays ($D \times H \times W \times C$) with 64-byte alignment, zero-copy 2D slice extraction [`GetSlice(z)`](file:///d:/TokenVector.Vision/Volumetric/Volume3DBuffer.cs), and 3D subvolume extraction.
+* **Trilinear 3D Resampling**: [`Volume3DTransforms.ResampleTrilinear`](file:///d:/TokenVector.Vision/Volumetric/Volume3DTransforms.cs) achieving **540+ MegaVoxels/sec** on 28 CPU cores with 0 GC pauses.
+* **3D Spatial Filtering & Pooling**: 3D smoothing filter [`FilterBox3D`](file:///d:/TokenVector.Vision/Volumetric/Volume3DTransforms.cs) and [`MaxPooling3D`](file:///d:/TokenVector.Vision/Volumetric/Volume3DTransforms.cs) for 3D CNNs (UNet3D, 3D ResNet, CT/MRI).
+* **3D Bounding Box**: Struct [`BoundingBox3D`](file:///d:/TokenVector.Vision/Detection/BoundingBox3D.cs) for 3D LiDAR perception & Medical lesion localization with accurate 3D IoU calculation.
 
 ---
 

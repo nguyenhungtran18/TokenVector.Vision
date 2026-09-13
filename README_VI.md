@@ -11,6 +11,41 @@
 
 ---
 
+## 🌐 Giới thiệu Hệ Sinh Thái TokenVector (The TokenVector AI Ecosystem)
+
+**TokenVector** là hệ sinh thái AI và Tính toán Hiệu năng cao (HPC) thế hệ mới được xây dựng hoàn toàn bằng **C# 12 / .NET 8/9 Native AOT**, hướng tới mục tiêu mang lại hiệu năng cấp độ C++/CUDA ngay trong môi trường Managed .NET với **0% áp lực Garbage Collection (Zero-GC)**:
+
+```
+                         ╔══════════════════════════════════════════════╗
+                         ║         THE TOKENVECTOR AI ECOSYSTEM         ║
+                         ╚══════════════════════════════════════════════╝
+                                                │
+         ┌────────────────────────┬─────────────┴────────────┬────────────────────────┐
+         ▼                        ▼                          ▼                        ▼
+┌──────────────────┐    ┌──────────────────┐       ┌──────────────────┐     ┌──────────────────┐
+│TokenVector.Vision│    │TokenVector.Numerics│     │ TokenVector.GPU  │     │ TokenVector.Data │
+│  (Thị giác AI    │    │ (Hạt nhân Số học │       │ (Tăng tốc Compute│     │ (Pipeline Dữ liệu│
+│ 2D & 3D Voxel)   │    │ Tensor & NDArray)│       │ DirectX12/OpenCL)│     │ & Streaming I/O) │
+└────────┬─────────┘    └────────┬─────────┘       └────────┬─────────┘     └────────┬─────────┘
+         │                       │                          │                        │
+         └───────────────────────┼──────────────────────────┴────────────────────────┘
+                                 ▼
+                     ┌────────────────────────┐
+                     │ TokenVector.Inference  │
+                     │(Động cơ Suy luận Mạng  │
+                     │  Nơ-ron: YOLO, ViT, 3D)│
+                     └────────────────────────┘
+```
+
+### Các Phân hệ Cốt lõi trong Hệ sinh thái:
+1. **[`TokenVector.Numerics`](https://github.com/nguyenhungtran18/TokenVector.Numerics)**: Hạt nhân tính toán số học, đại số tuyến tính và cấu trúc dữ liệu đa chiều `NDArray<T>`, tối ưu hoá bằng SIMD AVX2/AVX-512/FMA với chi phí Zero-Copy.
+2. **[`TokenVector.Vision`](https://github.com/nguyenhungtran18/TokenVector.Vision)**: Phân hệ Thị giác máy tính 2D/3D Volumetric, tiền xử lý ảnh 1-Pass Fused SIMD, YOLO Letterbox, NMS, và ImagePainter với hiệu năng vượt trội TorchVision và ImageSharp.
+3. **`TokenVector.GPU`**: Động cơ tăng tốc phần cứng đa nền tảng (Direct3D 12 Compute Shaders, OpenCL, Vulkan), tối ưu cho GPU AMD Radeon, NVIDIA GeForce, và Intel Arc.
+4. **`TokenVector.Data`**: Pipeline nạp trước dữ liệu đa luồng (Multi-threaded Double Buffering), triệt tiêu nghẽn I/O khi nạp dataset huấn luyện.
+5. **`TokenVector.Inference`**: Động cơ suy luận mạng nơ-ron nhúng siêu nhẹ, thực thi trực tiếp các mô hình YOLO, Vision Transformer (ViT), CNNs, và UNet3D.
+
+---
+
 ## 🎯 Tác dụng & Giá trị Cốt lõi của Thư viện
 
 ### 1. Tiền xử lý ảnh cho Mô hình AI / Deep Learning (CNN, ViT, YOLO, ResNet)
