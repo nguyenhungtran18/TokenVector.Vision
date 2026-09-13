@@ -1,0 +1,37 @@
+## .NET Core & Visual Studio
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.userprefs
+*.ide/
+.vscode/
+
+## Test & Coverage
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+## Python & Jupyter
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+
+## OS Files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+## NuGet Packages created in root
+*.nupkg
+*.snupkg
+!dist/nuget/*.nupkg
+!dist/nuget/*.snupkg
+!dist/*.zip

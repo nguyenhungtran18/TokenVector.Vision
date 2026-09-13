@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <LangVersion>12</LangVersion>
+    <RootNamespace>TokenVector.Vision</RootNamespace>
+    <AssemblyName>TokenVector.Vision</AssemblyName>
+    <Version>1.0.0</Version>
+    <PackageId>TokenVector.Vision</PackageId>
+    <Title>TokenVector.Vision - High-Performance Zero-GC Vision &amp; Image Transforms Engine</Title>
+    <Description>Ultra-high performance, Zero-GC image processing and vision transforms engine for TokenVector AI with direct AVX2/AVX-512 SIMD acceleration, fused operators, and zero-copy tensor bridge.</Description>
+    <Authors>TokenVector Project Team</Authors>
+    <Company>TokenVector</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>vision;image-processing;transforms;simd;avx2;fused-operators;zero-copy;tensor;tokenvector;deep-learning;dataloader</PackageTags>
+    <IsAotCompatible>true</IsAotCompatible>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/nguyenhungtran18/TokenVector.Vision</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>CS1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="D:\TokenVector Numerics\src\TokenVector.Numerics\TokenVector.Numerics.csproj" />
+  </ItemGroup>
+
+</Project>
